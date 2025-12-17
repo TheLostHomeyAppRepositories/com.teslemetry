@@ -1,0 +1,9 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Backup Capable"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

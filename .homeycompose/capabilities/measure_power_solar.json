@@ -1,0 +1,12 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Solar Power"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "units": {
+    "en": "W"
+  }
+}

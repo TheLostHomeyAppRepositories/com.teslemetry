@@ -1,0 +1,12 @@
+{
+  "type": "number",
+  "title": {
+    "en": "Home Usage"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor",
+  "units": {
+    "en": "W"
+  }
+}

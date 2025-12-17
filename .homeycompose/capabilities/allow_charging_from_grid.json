@@ -1,0 +1,9 @@
+{
+  "type": "boolean",
+  "title": {
+    "en": "Allow Charging From Grid"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "switch"
+}
