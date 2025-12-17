@@ -1,0 +1,10 @@
+{
+  "id": "alarm_contact.window_front_left",
+  "type": "boolean",
+  "title": {
+    "en": "Window (Front Left)"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

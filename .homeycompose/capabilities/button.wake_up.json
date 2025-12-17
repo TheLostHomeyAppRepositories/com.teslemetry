@@ -1,0 +1,10 @@
+{
+  "id": "button.wake_up",
+  "type": "boolean",
+  "title": {
+    "en": "Wake Up"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "button"
+}

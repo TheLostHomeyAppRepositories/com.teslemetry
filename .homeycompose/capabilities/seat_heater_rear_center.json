@@ -1,0 +1,10 @@
+{
+  "id": "seat_heater_rear_center",
+  "type": "boolean",
+  "title": {
+    "en": "Seat Heater (Rear Center)"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "switch"
+}

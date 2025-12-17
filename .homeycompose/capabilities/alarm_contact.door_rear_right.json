@@ -1,0 +1,10 @@
+{
+  "id": "alarm_contact.door_rear_right",
+  "type": "boolean",
+  "title": {
+    "en": "Door (Rear Right)"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

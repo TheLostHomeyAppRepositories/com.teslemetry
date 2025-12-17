@@ -1,0 +1,10 @@
+{
+  "id": "frunk",
+  "type": "boolean",
+  "title": {
+    "en": "Frunk"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "switch"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "button.keyless_driving",
+  "type": "boolean",
+  "title": {
+    "en": "Keyless Driving"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "button"
+}

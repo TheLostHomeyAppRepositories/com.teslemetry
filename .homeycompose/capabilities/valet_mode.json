@@ -1,0 +1,10 @@
+{
+  "id": "valet_mode",
+  "type": "boolean",
+  "title": {
+    "en": "Valet Mode"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "switch"
+}

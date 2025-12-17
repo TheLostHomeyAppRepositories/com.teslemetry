@@ -1,0 +1,10 @@
+{
+  "id": "button.flash_lights",
+  "type": "boolean",
+  "title": {
+    "en": "Flash Lights"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "button"
+}

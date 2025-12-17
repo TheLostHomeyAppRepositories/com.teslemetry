@@ -1,0 +1,10 @@
+{
+  "id": "seat_heater_front_right",
+  "type": "boolean",
+  "title": {
+    "en": "Seat Heater (Front Right)"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "switch"
+}

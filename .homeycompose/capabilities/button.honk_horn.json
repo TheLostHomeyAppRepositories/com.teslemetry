@@ -1,0 +1,10 @@
+{
+  "id": "button.honk_horn",
+  "type": "boolean",
+  "title": {
+    "en": "Honk Horn"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "button"
+}

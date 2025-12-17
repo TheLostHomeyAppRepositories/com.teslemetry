@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "homey-docs": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote@latest",
+        "https://apps.developer.homey.app/~gitbook/mcp"
+      ]
+    }
+  }
+}

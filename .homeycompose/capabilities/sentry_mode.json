@@ -1,0 +1,10 @@
+{
+  "id": "sentry_mode",
+  "type": "boolean",
+  "title": {
+    "en": "Sentry Mode"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "switch"
+}

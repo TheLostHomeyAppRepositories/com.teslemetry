@@ -1,0 +1,13 @@
+{
+  "id": "measure_temperature.outside",
+  "type": "number",
+  "title": {
+    "en": "Outside Temperature"
+  },
+  "units": {
+    "en": "°C"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}

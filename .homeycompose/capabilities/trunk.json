@@ -1,0 +1,10 @@
+{
+  "id": "trunk",
+  "type": "boolean",
+  "title": {
+    "en": "Trunk"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "switch"
+}

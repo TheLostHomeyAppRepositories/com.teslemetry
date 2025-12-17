@@ -1,0 +1,10 @@
+{
+  "id": "steering_wheel_heater",
+  "type": "boolean",
+  "title": {
+    "en": "Steering Wheel Heater"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "switch"
+}

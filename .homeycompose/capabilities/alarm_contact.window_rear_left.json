@@ -1,0 +1,10 @@
+{
+  "id": "alarm_contact.window_rear_left",
+  "type": "boolean",
+  "title": {
+    "en": "Window (Rear Left)"
+  },
+  "getable": true,
+  "setable": false,
+  "uiComponent": "sensor"
+}
