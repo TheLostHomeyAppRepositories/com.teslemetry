@@ -1,3 +1,4 @@
+import { EnergyDetails } from "@teslemetry/api";
 import type TeslemetryApp from "../../app.js";
 import TeslemetryDriver from "../../lib/TeslemetryDriver.js";
 
@@ -18,15 +19,34 @@ export default class WallConnectorDriver extends TeslemetryDriver {
       );
     }
 
-    return Object.values(products.energySites).flatMap(
-      (site) =>
-        site.product.components?.wall_connectors?.map((data) => ({
-          name: `${site.name} - ${data.device_id}`,
-          data: {
-            site: site.product.energy_site_id,
-            id: data.device_id,
-          },
-        })) || [],
+    const { response: productDetails } =
+      await app.teslemetry!.api.getProducts();
+
+    type EnergyProduct = Extract<
+      (typeof productDetails)[number],
+      { device_type: "energy" }
+    >;
+
+    const accessibleSites = Object.values(products.energySites).filter(
+      ({ metadata }) => metadata.access,
     );
+
+    return accessibleSites.flatMap((site) => {
+      const siteDetails = productDetails.find(
+        (product): product is EnergyProduct =>
+          product.device_type === "energy" &&
+          product.energy_site_id === site.id,
+      );
+
+      const wallConnectors = siteDetails?.components?.wall_connectors ?? [];
+
+      return wallConnectors.map((connector) => ({
+        name: `${site.name} - ${connector.device_id}`,
+        data: {
+          site: site.id,
+          device: connector.device_id,
+        },
+      }));
+    });
   }
 }

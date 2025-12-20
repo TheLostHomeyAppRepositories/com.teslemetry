@@ -1,8 +1,8 @@
 {
-  "id": "alarm_contact.window_front_right",
+  "id": "alarm_contact_door_front_right",
   "type": "boolean",
   "title": {
-    "en": "Window (Front Right)"
+    "en": "Door (Front Right)"
   },
   "getable": true,
   "setable": false,

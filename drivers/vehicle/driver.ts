@@ -1,25 +1,6 @@
 import type TeslemetryApp from "../../app.js";
 import TeslemetryDriver from "../../lib/TeslemetryDriver.js";
 
-const model = (vin: string) => {
-  switch (vin[3]) {
-    case "3":
-      return "Model 3";
-    case "S":
-      return "Model S";
-    case "X":
-      return "Model X";
-    case "Y":
-      return "Model Y";
-    case "C":
-      return "Cybertruck";
-    case "T":
-      return "Semi";
-    default:
-      return "Unknown Model";
-  }
-};
-
 export default class VehicleDriver extends TeslemetryDriver {
   async onInit() {
     this.homey.log("Vehicle driver initialized");
@@ -37,12 +18,15 @@ export default class VehicleDriver extends TeslemetryDriver {
         return [];
       }
 
-      return Object.values(products.vehicles).map((data) => ({
-        name: data.product.display_name || `Tesla ${model(data.vin)}`,
-        data: {
-          vin: data.vin,
-        },
-      }));
+      // Only includes vehicles that support fleet telemetry
+      return Object.values(products.vehicles)
+        .filter(({ metadata }) => !!metadata.fleet_telemetry)
+        .map((data) => ({
+          name: data.name,
+          data: {
+            vin: data.vin,
+          },
+        }));
     } catch (error) {
       this.homey.error("Failed to list vehicles:", error);
       throw new Error(

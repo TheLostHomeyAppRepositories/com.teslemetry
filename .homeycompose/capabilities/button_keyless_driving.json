@@ -1,8 +1,8 @@
 {
-  "id": "button.flash_lights",
+  "id": "button_keyless_driving",
   "type": "boolean",
   "title": {
-    "en": "Flash Lights"
+    "en": "Keyless Driving"
   },
   "getable": true,
   "setable": true,

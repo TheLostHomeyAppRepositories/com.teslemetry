@@ -1,0 +1,1 @@
+SDK actions should not be awaited in registerCapabilityListener since they can take up to a minute to complete.

@@ -1,8 +1,8 @@
 {
-  "id": "button.keyless_driving",
+  "id": "button_homelink",
   "type": "boolean",
   "title": {
-    "en": "Keyless Driving"
+    "en": "HomeLink"
   },
   "getable": true,
   "setable": true,

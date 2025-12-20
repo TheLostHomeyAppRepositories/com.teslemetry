@@ -6,5 +6,5 @@
   },
   "getable": true,
   "setable": true,
-  "uiComponent": "switch"
+  "uiComponent": "toggle"
 }

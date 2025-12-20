@@ -1,8 +1,8 @@
 {
-  "id": "alarm_contact.window_rear_left",
+  "id": "alarm_contact_window_front_left",
   "type": "boolean",
   "title": {
-    "en": "Window (Rear Left)"
+    "en": "Window (Front Left)"
   },
   "getable": true,
   "setable": false,

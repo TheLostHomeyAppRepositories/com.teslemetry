@@ -1,8 +1,8 @@
 {
-  "id": "button.homelink",
+  "id": "button_flash_lights",
   "type": "boolean",
   "title": {
-    "en": "HomeLink"
+    "en": "Flash Lights"
   },
   "getable": true,
   "setable": true,
