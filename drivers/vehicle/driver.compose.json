@@ -43,6 +43,14 @@
     "button_homelink",
     "button_wake_up"
   ],
+  "energy": {
+    "electricCar": true
+  },
+  "images": {
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
+  },
   "platforms": ["local", "cloud"],
   "pair": [
     {

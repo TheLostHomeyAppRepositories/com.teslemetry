@@ -19,7 +19,9 @@ const IMAGEN_MODEL = "imagen-3.0-generate-001";
 // Paths
 const ASSETS_DIR = path.resolve("assets/images");
 const DRIVER_VEHICLE_DIR = path.resolve("drivers/vehicle/assets/images");
-const DRIVER_POWERWALL_DIR = path.resolve("drivers/powerwall/assets/images");
+const DRIVER_ENERGY_SITE_DIR = path.resolve(
+  "drivers/energy-site/assets/images",
+);
 const DRIVER_WALL_CONNECTOR_DIR = path.resolve(
   "drivers/wall-connector/assets/images",
 );
@@ -30,7 +32,7 @@ const BRANDMARK_PATH = path.resolve("assets/Brandmark - ELECTRIC TIGHT.png");
 const dirs = [
   ASSETS_DIR,
   DRIVER_VEHICLE_DIR,
-  DRIVER_POWERWALL_DIR,
+  DRIVER_ENERGY_SITE_DIR,
   DRIVER_WALL_CONNECTOR_DIR,
 ];
 
@@ -61,11 +63,13 @@ const tasks: ImageTask[] = [
   // Driver Images
   // Guideline: White background, recognizable device.
   // Resolutions: Small 75x75, Large 500x500, XLarge 1000x1000 (Square 1:1)
+
+  // Vehicle Driver - Multiple Models
   {
-    name: "Driver: Tesla Vehicle",
+    name: "Driver: Tesla Model 3",
     prompt:
       "A studio shot of a white Tesla Model 3 from a front 3/4 angle. Pure white background, soft studio lighting, sharp details, photorealistic. The car is isolated on white. No text.",
-    outputDir: DRIVER_VEHICLE_DIR,
+    outputDir: path.join(DRIVER_VEHICLE_DIR, "model3"),
     sizes: [
       { name: "small.png", width: 75, height: 75 },
       { name: "large.png", width: 500, height: 500 },
@@ -73,10 +77,67 @@ const tasks: ImageTask[] = [
     ],
   },
   {
+    name: "Driver: Tesla Model Y",
+    prompt:
+      "A studio shot of a white Tesla Model Y from a front 3/4 angle. Pure white background, soft studio lighting, sharp details, photorealistic. The SUV is isolated on white. No text.",
+    outputDir: path.join(DRIVER_VEHICLE_DIR, "modelY"),
+    sizes: [
+      { name: "small.png", width: 75, height: 75 },
+      { name: "large.png", width: 500, height: 500 },
+      { name: "xlarge.png", width: 1000, height: 1000 },
+    ],
+  },
+  {
+    name: "Driver: Tesla Model S",
+    prompt:
+      "A studio shot of a white Tesla Model S from a front 3/4 angle. Pure white background, soft studio lighting, sharp details, photorealistic. The sedan is isolated on white. No text.",
+    outputDir: path.join(DRIVER_VEHICLE_DIR, "modelS"),
+    sizes: [
+      { name: "small.png", width: 75, height: 75 },
+      { name: "large.png", width: 500, height: 500 },
+      { name: "xlarge.png", width: 1000, height: 1000 },
+    ],
+  },
+  {
+    name: "Driver: Tesla Model X",
+    prompt:
+      "A studio shot of a white Tesla Model X from a front 3/4 angle. Pure white background, soft studio lighting, sharp details, photorealistic. The SUV is isolated on white. No text.",
+    outputDir: path.join(DRIVER_VEHICLE_DIR, "modelX"),
+    sizes: [
+      { name: "small.png", width: 75, height: 75 },
+      { name: "large.png", width: 500, height: 500 },
+      { name: "xlarge.png", width: 1000, height: 1000 },
+    ],
+  },
+  {
+    name: "Driver: Tesla Cybertruck",
+    prompt:
+      "A studio shot of a Tesla Cybertruck from a front 3/4 angle. Pure white background, soft studio lighting, sharp details, photorealistic. The angular stainless steel truck is isolated on white. No text.",
+    outputDir: path.join(DRIVER_VEHICLE_DIR, "cybertruck"),
+    sizes: [
+      { name: "small.png", width: 75, height: 75 },
+      { name: "large.png", width: 500, height: 500 },
+      { name: "xlarge.png", width: 1000, height: 1000 },
+    ],
+  },
+
+  // Energy Site Driver - Multiple Products
+  {
     name: "Driver: Tesla Powerwall",
     prompt:
       "A studio shot of a Tesla Powerwall 2 battery unit. Pure white background. Front view, clean, minimalist, photorealistic. The unit is isolated on white. No text.",
-    outputDir: DRIVER_POWERWALL_DIR,
+    outputDir: path.join(DRIVER_ENERGY_SITE_DIR, "powerwall"),
+    sizes: [
+      { name: "small.png", width: 75, height: 75 },
+      { name: "large.png", width: 500, height: 500 },
+      { name: "xlarge.png", width: 1000, height: 1000 },
+    ],
+  },
+  {
+    name: "Driver: Tesla Solar Roof",
+    prompt:
+      "A studio shot of a modern house with Tesla Solar Roof tiles. Pure white background, front-angled view of the roof, clean, photorealistic. The house is isolated on white. No text.",
+    outputDir: path.join(DRIVER_ENERGY_SITE_DIR, "solar"),
     sizes: [
       { name: "small.png", width: 75, height: 75 },
       { name: "large.png", width: 500, height: 500 },
@@ -107,7 +168,7 @@ async function generateAndSave() {
   // Helper to copy icon.svg if missing
   const driverAssetsDirs = [
     path.resolve("drivers/vehicle/assets"),
-    path.resolve("drivers/powerwall/assets"),
+    path.resolve("drivers/energy-site/assets"),
     path.resolve("drivers/wall-connector/assets"),
   ];
   for (const driverDir of driverAssetsDirs) {

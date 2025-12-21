@@ -1,15 +1,13 @@
-import Homey from "homey";
-import { EnergyDetails, TeslemetryEnergyApi } from "@teslemetry/api";
-import TeslemetryApp from "../../app.js";
+import { EnergyDetails } from "@teslemetry/api";
+import TeslemetryDevice from "../../lib/TeslemetryDevice.js";
 
-export default class PowerwallDevice extends Homey.Device {
+export default class PowerwallDevice extends TeslemetryDevice {
   site!: EnergyDetails;
   pollingCleanup!: Array<() => void>;
 
   async onInit() {
     try {
-      const app = this.homey.app as TeslemetryApp;
-      const site = app.products?.energySites?.[this.getData().id];
+      const site = this.homey.app.products?.energySites?.[this.getData().id];
       if (!site) throw new Error("No site found");
       this.site = site;
     } catch (e) {
@@ -23,9 +21,8 @@ export default class PowerwallDevice extends Homey.Device {
       this.site.api.requestPolling("liveStatus"),
     ];
 
-    this.site.api.on("liveStatus", ({ response }) => {
-      if (!response) return;
-      const data = response as any;
+    this.site.api.on("liveStatus", ({ response: data }) => {
+      if (!data) return;
 
       // Map Live Status fields
       this.setCapabilityValue("measure_battery", data.percentage_charged).catch(
@@ -37,7 +34,7 @@ export default class PowerwallDevice extends Homey.Device {
       this.setCapabilityValue("measure_power", data.battery_power).catch(
         this.error,
       );
-      this.setCapabilityValue("measure_power_solar", data.solar_power).catch(
+      this.setCapabilityValue("measure_power.solar", data.solar_power).catch(
         this.error,
       );
       this.setCapabilityValue("measure_load_power", data.load_power).catch(
@@ -46,13 +43,9 @@ export default class PowerwallDevice extends Homey.Device {
       this.setCapabilityValue("measure_home_usage", data.load_power).catch(
         this.error,
       );
-      this.setCapabilityValue("measure_power_grid", data.grid_power).catch(
+      this.setCapabilityValue("measure_power.grid", data.grid_power).catch(
         this.error,
       );
-      this.setCapabilityValue(
-        "measure_grid_services_power",
-        data.grid_services_power,
-      ).catch(this.error);
       this.setCapabilityValue(
         "measure_generator_exported",
         data.generator_power,
@@ -71,10 +64,6 @@ export default class PowerwallDevice extends Homey.Device {
         "grid_status",
         data.grid_status === "Active",
       ).catch(this.error);
-      this.setCapabilityValue(
-        "grid_services_active",
-        data.grid_services_active,
-      ).catch(this.error);
 
       // Calculated values
       if (typeof data.grid_power === "number") {
@@ -87,7 +76,7 @@ export default class PowerwallDevice extends Homey.Device {
 
     this.site.api.on("siteInfo", ({ response }) => {
       if (!response) return;
-      const data = response as any;
+      const data = response;
 
       this.setCapabilityValue(
         "backup_reserve",
@@ -104,10 +93,14 @@ export default class PowerwallDevice extends Homey.Device {
       if (data.components) {
         this.setCapabilityValue(
           "allow_export",
-          data.components.customer_preferred_export_rule,
+          (data.components.customer_preferred_export_rule ??
+            data.components.non_export_configured)
+            ? "never"
+            : "battery_ok",
         ).catch(this.error);
+
         this.setCapabilityValue(
-          "allow_charging_from_grid",
+          "charge_from_grid",
           !data.components.disallow_charge_from_grid_with_solar_installed,
         ).catch(this.error);
       }
@@ -123,12 +116,10 @@ export default class PowerwallDevice extends Homey.Device {
         "off_grid_reserve",
         data.off_grid_vehicle_charging_reserve_percent,
       ).catch(this.error);
-      this.setCapabilityValue("backup_capable", data.backup_capable).catch(
-        this.error,
-      );
+
       this.setCapabilityValue(
         "grid_services_enabled",
-        data.grid_services_enabled,
+        data.components.grid_services_enabled,
       ).catch(this.error);
       this.setCapabilityValue(
         "measure_vpp_backup_reserve",
@@ -143,13 +134,6 @@ export default class PowerwallDevice extends Homey.Device {
 
     this.registerCapabilityListener("off_grid_reserve", async (value) => {
       await this.site.api.setOffGridVehicleChargingReserve(value);
-    });
-
-    this.registerCapabilityListener("allow_export", async (value) => {
-      const disallowCharge = !this.getCapabilityValue(
-        "allow_charging_from_grid",
-      );
-      await this.site.api.gridImportExport(value, disallowCharge);
     });
 
     this.registerCapabilityListener(
@@ -167,10 +151,6 @@ export default class PowerwallDevice extends Homey.Device {
     this.registerCapabilityListener("storm_watch", async (value) => {
       await this.site.api.setStormMode(value);
     });
-  }
-
-  async onAdded() {
-    this.log("Device added");
   }
 
   async onUninit(): Promise<void> {

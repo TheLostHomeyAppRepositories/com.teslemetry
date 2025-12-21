@@ -1,7 +1,7 @@
 {
   "type": "boolean",
   "title": {
-    "en": "Allow Charging From Grid"
+    "en": "Charge From Grid"
   },
   "getable": true,
   "setable": true,

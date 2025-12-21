@@ -1,2 +1,8 @@
 import Homey from "homey";
-export default class TeslemetryDevice extends Homey.Device {}
+import type TeslemetryApp from "../app.js";
+
+export default class TeslemetryDevice extends Homey.Device {
+  declare homey: Homey.Device["homey"] & {
+    app: TeslemetryApp;
+  };
+}

@@ -1,16 +1,15 @@
 {
   "name": {
-    "en": "Tesla Wall Connector"
+    "en": "Tesla Energy Site"
   },
-  "class": "evcharger",
-  "capabilities": ["evcharger_charging_state", "measure_power", "vehicle"],
-  "platforms": ["local", "cloud"],
-  "connectivity": ["cloud"],
+  "capabilities": [],
+  "class": "battery",
   "images": {
     "small": "{{driverAssetsPath}}/images/small.png",
     "large": "{{driverAssetsPath}}/images/large.png",
     "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
   },
+  "platforms": ["local", "cloud"],
   "pair": [
     {
       "id": "login_oauth2",

@@ -2,18 +2,18 @@ import Homey from "homey";
 import type TeslemetryApp from "../../app.js";
 import { Signals, SseData, Teslemetry, VehicleDetails } from "@teslemetry/api";
 import { isBooleanObject } from "node:util/types";
+import TeslemetryDevice from "../../lib/TeslemetryDevice.js";
 
-export default class VehicleDevice extends Homey.Device {
+export default class VehicleDevice extends TeslemetryDevice {
+  private teslemetry!: Teslemetry;
   private vehicle!: VehicleDetails;
-  private cache: Map<
-    keyof SseData["data"],
-    SseData["data"][keyof SseData["data"]]
-  > = new Map();
 
   async onInit() {
     try {
       const app = this.homey.app as TeslemetryApp;
       const vehicle = app.products?.vehicles?.[this.getData().vin];
+      if (!app.teslemetry) throw new Error("No Teslemetry API found");
+      this.teslemetry = app.teslemetry;
       if (!vehicle) throw new Error("No vehicle found");
       this.vehicle = vehicle;
     } catch (e) {
@@ -93,7 +93,10 @@ export default class VehicleDevice extends Homey.Device {
       ),
     );
     this.vehicle.sse.onSignal("DefrostMode", (value) =>
-      this.setCapabilityValue("defrost_mode", value).catch(this.error),
+      this.setCapabilityValue(
+        "defrost_mode",
+        value?.endsWith("Normal") || value?.endsWith("Max"),
+      ).catch(this.error),
     );
     this.vehicle.sse.onSignal("HvacSteeringWheelHeatLevel", (value) =>
       this.setCapabilityValue("steering_wheel_heater", String(value)).catch(

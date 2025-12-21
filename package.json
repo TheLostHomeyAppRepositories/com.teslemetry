@@ -8,14 +8,16 @@
     "tsc": "tsc",
     "build": "homey app build",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
-    "dev": "homey app run -l @teslemetry/api",
-    "validate": "homey app validate"
+    "dev": "homey app run",
+    "app:run": "homey app run",
+    "app:install": "homey app install",
+    "app:validate": "homey app validate"
   },
   "dependencies": {
-    "@teslemetry/api": "^0.5.0",
-    "homey": "^3.10.0"
+    "@teslemetry/api": "^0.5.2"
   },
   "devDependencies": {
+    "homey": "^3.10.0",
     "@google/genai": "^1.33.0",
     "@google/generative-ai": "^0.24.1",
     "@tsconfig/node16": "^16.1.8",

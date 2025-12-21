@@ -1,6 +1,7 @@
 {
   "_comment": "This file is generated. Please edit .homeycompose/app.json instead.",
   "id": "com.teslemetry",
+  "brandColor": "#3D6DB5",
   "version": "1.0.0",
   "compatibility": ">=12.4.5",
   "sdk": 3,
@@ -31,36 +32,15 @@
   "drivers": [
     {
       "name": {
-        "en": "Tesla Powerwall"
+        "en": "Tesla Energy Site"
       },
+      "capabilities": [],
       "class": "battery",
-      "capabilities": [
-        "measure_power",
-        "measure_battery",
-        "backup_capable",
-        "grid_services_active",
-        "grid_services_enabled",
-        "grid_status",
-        "storm_watch_active",
-        "backup_reserve",
-        "off_grid_reserve",
-        "allow_export",
-        "operation_mode",
-        "measure_energy_left",
-        "measure_generator_exported",
-        "measure_grid_exported",
-        "measure_power_grid",
-        "measure_grid_services_power",
-        "measure_home_usage",
-        "measure_island_status",
-        "measure_load_power",
-        "measure_solar_generated",
-        "measure_power_solar",
-        "measure_version",
-        "measure_vpp_backup_reserve",
-        "allow_charging_from_grid",
-        "storm_watch"
-      ],
+      "images": {
+        "small": "/drivers/energy-site/assets/images/small.png",
+        "large": "/drivers/energy-site/assets/images/large.png",
+        "xlarge": "/drivers/energy-site/assets/images/xlarge.png"
+      },
       "platforms": [
         "local",
         "cloud"
@@ -88,7 +68,7 @@
           "template": "login_oauth2"
         }
       ],
-      "id": "powerwall"
+      "id": "energy-site"
     },
     {
       "name": {
@@ -135,6 +115,14 @@
         "button_homelink",
         "button_wake_up"
       ],
+      "energy": {
+        "electricCar": true
+      },
+      "images": {
+        "small": "https://static-assets.tesla.com/configurator/compositor?context=design_studio_2?&bkba_opt=1&view=STUD_3QTR&model=m3&size=800&crop=1150,550,400,250&options=$APF2,$APBS,$IPW1,$PPSB,$W40B,$MT328,$CW03,$SC04",
+        "large": "https://static-assets.tesla.com/configurator/compositor?context=design_studio_2?&bkba_opt=1&view=STUD_3QTR&model=m3&size=800&crop=1150,550,400,250&options=$APF2,$APBS,$IPW1,$PPSB,$W40B,$MT328,$CW03,$SC04",
+        "xlarge": "https://static-assets.tesla.com/configurator/compositor?context=design_studio_2?&bkba_opt=1&view=STUD_3QTR&model=m3&size=800&crop=1150,550,400,250&options=$APF2,$APBS,$IPW1,$PPSB,$W40B,$MT328,$CW03,$SC04"
+      },
       "platforms": [
         "local",
         "cloud"
@@ -170,22 +158,45 @@
       },
       "class": "evcharger",
       "capabilities": [
-        "evcharger_charging",
         "evcharger_charging_state",
-        "meter_power",
         "measure_power",
-        "measure_voltage"
+        "vehicle"
       ],
       "platforms": [
         "local",
         "cloud"
       ],
-      "connectivity": [],
+      "connectivity": [
+        "cloud"
+      ],
       "images": {
         "small": "/drivers/wall-connector/assets/images/small.png",
         "large": "/drivers/wall-connector/assets/images/large.png",
         "xlarge": "/drivers/wall-connector/assets/images/xlarge.png"
       },
+      "pair": [
+        {
+          "id": "login_oauth2",
+          "template": "login_oauth2"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "login_oauth2",
+          "template": "login_oauth2"
+        }
+      ],
       "id": "wall-connector"
     }
   ],
@@ -269,15 +280,6 @@
       "getable": true,
       "setable": false,
       "uiComponent": "sensor"
-    },
-    "allow_charging_from_grid": {
-      "type": "boolean",
-      "title": {
-        "en": "Allow Charging From Grid"
-      },
-      "getable": true,
-      "setable": true,
-      "uiComponent": "toggle"
     },
     "allow_export": {
       "type": "enum",
@@ -380,6 +382,15 @@
       "getable": true,
       "setable": true,
       "uiComponent": "button"
+    },
+    "charge_from_grid": {
+      "type": "boolean",
+      "title": {
+        "en": "Charge From Grid"
+      },
+      "getable": true,
+      "setable": true,
+      "uiComponent": "toggle"
     },
     "charge_port_door": {
       "id": "charge_port_door",
@@ -834,6 +845,16 @@
       "getable": true,
       "setable": true,
       "uiComponent": "toggle"
+    },
+    "vehicle": {
+      "type": "string",
+      "title": {
+        "en": "Connected Vehicle"
+      },
+      "getable": true,
+      "setable": false,
+      "uiComponent": "sensor",
+      "icon": "/assets/icon.svg"
     }
   }
 }
