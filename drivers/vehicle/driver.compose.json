@@ -37,6 +37,7 @@
     "button_homelink",
     "button_wake_up"
   ],
+  "connectivity": ["cloud"],
   "energy": {
     "electricCar": true
   },

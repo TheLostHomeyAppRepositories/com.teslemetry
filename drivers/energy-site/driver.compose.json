@@ -3,6 +3,7 @@
     "en": "Tesla Energy Site"
   },
   "capabilities": [],
+  "connectivity": ["cloud"],
   "class": "battery",
   "images": {
     "small": "{{driverAssetsPath}}/images/small.png",

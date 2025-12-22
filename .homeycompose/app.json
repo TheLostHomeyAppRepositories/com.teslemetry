@@ -21,5 +21,11 @@
   "author": {
     "name": "Teslemetry",
     "email": "hello@teslemetry.com"
-  }
+  },
+  "bugs": {
+    "url": "https://github.com/teslemetry/homey/issues"
+  },
+  "source": "https://github.com/teslemetry/homey",
+  "homepage": "https://teslemetry.com",
+  "support": "mailto:support@teslemetry.com"
 }

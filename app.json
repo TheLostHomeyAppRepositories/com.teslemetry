@@ -28,6 +28,12 @@
     "name": "Teslemetry",
     "email": "hello@teslemetry.com"
   },
+  "bugs": {
+    "url": "https://github.com/teslemetry/homey/issues"
+  },
+  "source": "https://github.com/teslemetry/homey",
+  "homepage": "https://teslemetry.com",
+  "support": "mailto:support@teslemetry.com",
   "esm": true,
   "drivers": [
     {
@@ -35,6 +41,9 @@
         "en": "Tesla Energy Site"
       },
       "capabilities": [],
+      "connectivity": [
+        "cloud"
+      ],
       "class": "battery",
       "images": {
         "small": "/drivers/energy-site/assets/images/small.png",
@@ -109,6 +118,9 @@
         "button_homelink",
         "button_wake_up"
       ],
+      "connectivity": [
+        "cloud"
+      ],
       "energy": {
         "electricCar": true
       },
@@ -156,14 +168,14 @@
         "measure_power",
         "connected_vehicle"
       ],
+      "connectivity": [
+        "cloud"
+      ],
       "energy": {
         "evCharger": true
       },
       "platforms": [
         "local",
-        "cloud"
-      ],
-      "connectivity": [
         "cloud"
       ],
       "images": {
