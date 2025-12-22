@@ -50,8 +50,7 @@
         "xlarge": "/drivers/energy-site/assets/images/xlarge.png"
       },
       "platforms": [
-        "local",
-        "cloud"
+        "local"
       ],
       "pair": [
         {
@@ -129,8 +128,7 @@
         "xlarge": "/drivers/vehicle/assets/images/xlarge.png"
       },
       "platforms": [
-        "local",
-        "cloud"
+        "local"
       ],
       "pair": [
         {
@@ -174,8 +172,7 @@
         "evCharger": true
       },
       "platforms": [
-        "local",
-        "cloud"
+        "local"
       ],
       "images": {
         "small": "/drivers/wall-connector/assets/images/small.png",
