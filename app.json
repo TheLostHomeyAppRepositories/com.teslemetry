@@ -37,9 +37,9 @@
       "capabilities": [],
       "class": "battery",
       "images": {
-        "small": "/drivers/energy-site/assets/images/powerwall/small.png",
-        "large": "/drivers/energy-site/assets/images/powerwall/large.png",
-        "xlarge": "/drivers/energy-site/assets/images/powerwall/xlarge.png"
+        "small": "/drivers/energy-site/assets/images/small.png",
+        "large": "/drivers/energy-site/assets/images/large.png",
+        "xlarge": "/drivers/energy-site/assets/images/xlarge.png"
       },
       "platforms": [
         "local",
