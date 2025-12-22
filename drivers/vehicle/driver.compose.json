@@ -9,7 +9,7 @@
     "measure_temperature",
     "measure_temperature_outside",
     "locked",
-    "locked.charge_cable",
+    "charge_port_door",
     "thermostat_mode",
     "charge_state",
     "meter_power",
@@ -29,6 +29,7 @@
     "frunk",
     "trunk",
     "windowcoverings_state",
+    "alarm_motion",
     "alarm_contact_door_front_left",
     "alarm_contact_door_front_right",
     "alarm_contact_door_rear_left",
@@ -47,9 +48,9 @@
     "electricCar": true
   },
   "images": {
-    "small": "{{driverAssetsPath}}/images/ModelY/small.png",
-    "large": "{{driverAssetsPath}}/images/ModelY/large.png",
-    "xlarge": "{{driverAssetsPath}}/images/ModelY/xlarge.png"
+    "small": "{{driverAssetsPath}}/images/small.png",
+    "large": "{{driverAssetsPath}}/images/large.png",
+    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
   },
   "platforms": ["local", "cloud"],
   "pair": [

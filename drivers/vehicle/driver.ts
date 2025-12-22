@@ -26,13 +26,20 @@ export default class VehicleDriver extends TeslemetryDriver {
         return [];
       }
 
-      // Only includes vehicles that support fleet telemetry
+      // Only includes vehicles with a subscription, that support fleet telemetry, and are configured correctly
       return Object.values(products.vehicles)
-        .filter(({ metadata }) => !!metadata.fleet_telemetry)
+        .filter(
+          ({ metadata }) =>
+            metadata.access && !!metadata.fleet_telemetry && !metadata.polling,
+        )
         .map((data) => ({
           name: data.name,
           data: {
             vin: data.vin,
+          },
+          capabilitiesOptions: {
+            frunk: { setable: data.metadata.config?.can_actuate_trunks },
+            trunk: { setable: data.metadata.config?.can_actuate_trunks },
           },
           ...icon?.[data.vin[3]],
         }));

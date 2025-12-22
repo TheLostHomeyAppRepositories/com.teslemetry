@@ -1,0 +1,10 @@
+{
+  "id": "charge_port_latch",
+  "type": "boolean",
+  "title": {
+    "en": "Charge Port Latch"
+  },
+  "getable": true,
+  "setable": true,
+  "uiComponent": "toggle"
+}

@@ -1,19 +1,26 @@
-import Homey from "homey";
 import type TeslemetryApp from "../../app.js";
-import { Signals, SseData, Teslemetry, VehicleDetails } from "@teslemetry/api";
-import { isBooleanObject } from "node:util/types";
+import { Teslemetry, VehicleDetails } from "@teslemetry/api";
 import TeslemetryDevice from "../../lib/TeslemetryDevice.js";
 
+const isBool = (x: any) => typeof x === "boolean";
+
+const chargePortLatchMap = new Map<any, boolean>([
+  ["ChargePortLatchEngaged", true],
+  ["ChargePortLatchDisengaged", false],
+]);
+
+const defrostModeMap = new Map<any, boolean>([
+  ["DefrostModeOn", true],
+  ["DefrostModeStateMax", true],
+  ["DefrostModeOff", false],
+]);
+
 export default class VehicleDevice extends TeslemetryDevice {
-  private teslemetry!: Teslemetry;
   private vehicle!: VehicleDetails;
 
   async onInit() {
     try {
-      const app = this.homey.app as TeslemetryApp;
-      const vehicle = app.products?.vehicles?.[this.getData().vin];
-      if (!app.teslemetry) throw new Error("No Teslemetry API found");
-      this.teslemetry = app.teslemetry;
+      const vehicle = this.homey.app.products?.vehicles?.[this.getData().vin];
       if (!vehicle) throw new Error("No vehicle found");
       this.vehicle = vehicle;
     } catch (e) {
@@ -36,19 +43,8 @@ export default class VehicleDevice extends TeslemetryDevice {
     this.vehicle.sse.onSignal("ChargeState", (value) =>
       this.setCapabilityValue(
         "onoff.charge",
-        value?.endsWith("Charging"),
+        value === "ChargeStateStarting" || value === "ChargeStateCharging",
       ).catch(this.error),
-    );
-    this.vehicle.sse.onSignal("ACChargingEnergyIn", (value) =>
-      this.setCapabilityValue("meter_power", value).catch(this.error),
-    );
-    this.vehicle.sse.onSignal(
-      "ACChargingPower",
-      (value) =>
-        this.setCapabilityValue(
-          "measure_power",
-          value ? value * 1000 : value,
-        ).catch(this.error), // kW to W?
     );
     this.vehicle.sse.onSignal("ChargerVoltage", (value) =>
       this.setCapabilityValue("measure_voltage", value).catch(this.error),
@@ -57,25 +53,49 @@ export default class VehicleDevice extends TeslemetryDevice {
       this.setCapabilityValue("measure_current", value).catch(this.error),
     );
 
+    // AC Charging
+    this.vehicle.sse.onSignal("ACChargingEnergyIn", (value) =>
+      this.setCapabilityValue("meter_power", value).catch(this.error),
+    );
+    this.vehicle.sse.onSignal("ACChargingPower", (value) =>
+      this.setCapabilityValue(
+        "measure_power",
+        value ? value * 1000 : value,
+      ).catch(this.error),
+    );
+
+    // DC Charging
+    this.vehicle.sse.onSignal("DCChargingEnergyIn", (value) =>
+      this.setCapabilityValue("meter_power", value).catch(this.error),
+    );
+    this.vehicle.sse.onSignal("DCChargingPower", (value) =>
+      this.setCapabilityValue(
+        "measure_power",
+        value ? value * 1000 : value,
+      ).catch(this.error),
+    );
+
     // Lock & Sentry & Security
     this.vehicle.sse.onSignal("Locked", (value) =>
       this.setCapabilityValue("locked", value).catch(this.error),
     );
-    this.vehicle.sse.onSignal("SentryMode", (value) =>
+    this.vehicle.sse.onSignal("SentryMode", (value) => {
       this.setCapabilityValue(
         "sentry_mode",
-        value?.replace("SentryModeState", ""),
-      ).catch(this.error),
-    );
-    this.vehicle.sse.onSignal("ValetModeEnabled", (value) =>
-      this.setCapabilityValue("valet_mode", value).catch(this.error),
-    );
+        value !== "SentryModeStateOff",
+      ).catch(this.error);
+      this.setCapabilityValue("alarm_motion", value === "SentryModeStatePanic");
+    });
+
     this.vehicle.sse.onSignal("ChargePortLatch", (value) =>
       // 'Engaged' -> Locked?
       this.setCapabilityValue(
-        "locked.charge_cable",
-        value?.endsWith("Engaged"),
+        "charge_port_latch",
+        chargePortLatchMap.get(value),
       ).catch(this.error),
+    );
+    this.vehicle.sse.onSignal("ChargePortDoorOpen", (value) =>
+      this.setCapabilityValue("charge_port_door", value).catch(this.error),
     );
 
     // Climate
@@ -84,19 +104,29 @@ export default class VehicleDevice extends TeslemetryDevice {
         this.error,
       ),
     );
+    this.vehicle.sse.onSignal(
+      this.vehicle.metadata.config!.rhd
+        ? "HvacRightTemperatureRequest"
+        : "HvacLeftTemperatureRequest",
+      (value) =>
+        this.setCapabilityValue("target_temperature.inside", value).catch(
+          this.error,
+        ),
+    );
     this.vehicle.sse.onSignal("InsideTemp", (value) =>
-      this.setCapabilityValue("measure_temperature", value).catch(this.error),
+      this.setCapabilityValue("measure_temperature.inside", value).catch(
+        this.error,
+      ),
     );
     this.vehicle.sse.onSignal("OutsideTemp", (value) =>
-      this.setCapabilityValue("measure_temperature_outside", value).catch(
+      this.setCapabilityValue("measure_temperature.outside", value).catch(
         this.error,
       ),
     );
     this.vehicle.sse.onSignal("DefrostMode", (value) =>
-      this.setCapabilityValue(
-        "defrost_mode",
-        value?.endsWith("Normal") || value?.endsWith("Max"),
-      ).catch(this.error),
+      this.setCapabilityValue("defrost_mode", defrostModeMap.get(value)).catch(
+        this.error,
+      ),
     );
     this.vehicle.sse.onSignal("HvacSteeringWheelHeatLevel", (value) =>
       this.setCapabilityValue("steering_wheel_heater", String(value)).catch(
@@ -116,43 +146,30 @@ export default class VehicleDevice extends TeslemetryDevice {
 
     // Doors & Windows (Assuming Signal names)
     this.vehicle.sse.onSignal("DoorState", (value) => {
-      if (isBooleanObject(value?.DriverFront))
+      if (isBool(value?.DriverFront))
         this.setCapabilityValue(
           "alarm_contact_door_front_left",
-          value?.DriverFront,
+          value.DriverFront,
         ).catch(this.error);
-    });
-    this.vehicle.sse.onSignal("DoorState", (value) => {
-      if (isBooleanObject(value?.PassengerFront))
+      if (isBool(value?.PassengerFront))
         this.setCapabilityValue(
           "alarm_contact_door_front_right",
-          value?.PassengerFront,
+          value.PassengerFront,
         ).catch(this.error);
-    });
-    this.vehicle.sse.onSignal("DoorState", (value) => {
-      if (isBooleanObject(value?.DriverRear))
+      if (isBool(value?.DriverRear))
         this.setCapabilityValue(
           "alarm_contact_door_rear_left",
-          value?.DriverRear,
+          value.DriverRear,
         ).catch(this.error);
-    });
-    this.vehicle.sse.onSignal("DoorState", (value) => {
-      if (isBooleanObject(value?.PassengerRear))
+      if (isBool(value?.PassengerRear))
         this.setCapabilityValue(
           "alarm_contact_door_rear_right",
-          value?.PassengerRear,
+          value.PassengerRear,
         ).catch(this.error);
-    });
-    this.vehicle.sse.onSignal("ChargePortDoorOpen", (value) =>
-      this.setCapabilityValue("charge_port_door", value).catch(this.error),
-    );
-    this.vehicle.sse.onSignal("DoorState", (value) => {
-      if (isBooleanObject(value?.TrunkFront))
-        this.setCapabilityValue("frunk", value?.TrunkFront).catch(this.error);
-    });
-    this.vehicle.sse.onSignal("DoorState", (value) => {
-      if (isBooleanObject(value?.TrunkRear))
-        this.setCapabilityValue("trunk", value?.TrunkRear).catch(this.error);
+      if (isBool(value?.TrunkFront))
+        this.setCapabilityValue("frunk", value.TrunkFront).catch(this.error);
+      if (isBool(value?.TrunkRear))
+        this.setCapabilityValue("trunk", value.TrunkRear).catch(this.error);
     });
 
     // --- Capability Listeners (Actions) ---
