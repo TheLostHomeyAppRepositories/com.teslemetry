@@ -1,5 +1,4 @@
 {
-  "id": "defrost_mode",
   "type": "boolean",
   "title": {
     "en": "Defrost"

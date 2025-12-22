@@ -1,5 +1,4 @@
 {
-  "id": "sentry_mode",
   "type": "boolean",
   "title": {
     "en": "Sentry Mode"

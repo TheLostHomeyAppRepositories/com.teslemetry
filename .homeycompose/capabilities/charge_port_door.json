@@ -1,5 +1,4 @@
 {
-  "id": "charge_port_door",
   "type": "boolean",
   "title": {
     "en": "Charge Port Door"

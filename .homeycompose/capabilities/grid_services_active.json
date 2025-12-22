@@ -1,9 +1,0 @@
-{
-  "type": "boolean",
-  "title": {
-    "en": "Grid Services Active"
-  },
-  "getable": true,
-  "setable": false,
-  "uiComponent": "sensor"
-}

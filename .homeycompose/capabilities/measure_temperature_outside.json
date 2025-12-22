@@ -1,5 +1,4 @@
 {
-  "id": "measure_temperature_outside",
   "type": "number",
   "title": {
     "en": "Outside Temperature"

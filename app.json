@@ -89,14 +89,10 @@
         "measure_voltage",
         "measure_current",
         "sentry_mode",
-        "valet_mode",
         "defrost_mode",
         "steering_wheel_heater",
         "seat_heater_front_left",
         "seat_heater_front_right",
-        "seat_heater_rear_left",
-        "seat_heater_rear_right",
-        "seat_heater_rear_center",
         "charge_port_latch",
         "frunk",
         "trunk",
@@ -107,10 +103,6 @@
         "alarm_contact_door_front_right",
         "alarm_contact_door_rear_left",
         "alarm_contact_door_rear_right",
-        "alarm_contact_window_front_left",
-        "alarm_contact_window_front_right",
-        "alarm_contact_window_rear_left",
-        "alarm_contact_window_rear_right",
         "button_flash_lights",
         "button_honk_horn",
         "button_keyless_driving",
@@ -207,7 +199,6 @@
   ],
   "capabilities": {
     "alarm_contact_door_front_left": {
-      "id": "alarm_contact_door_front_left",
       "type": "boolean",
       "title": {
         "en": "Door (Front Left)"
@@ -217,7 +208,6 @@
       "uiComponent": "sensor"
     },
     "alarm_contact_door_front_right": {
-      "id": "alarm_contact_door_front_right",
       "type": "boolean",
       "title": {
         "en": "Door (Front Right)"
@@ -227,7 +217,6 @@
       "uiComponent": "sensor"
     },
     "alarm_contact_door_rear_left": {
-      "id": "alarm_contact_door_rear_left",
       "type": "boolean",
       "title": {
         "en": "Door (Rear Left)"
@@ -237,50 +226,9 @@
       "uiComponent": "sensor"
     },
     "alarm_contact_door_rear_right": {
-      "id": "alarm_contact_door_rear_right",
       "type": "boolean",
       "title": {
         "en": "Door (Rear Right)"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor"
-    },
-    "alarm_contact_window_front_left": {
-      "id": "alarm_contact_window_front_left",
-      "type": "boolean",
-      "title": {
-        "en": "Window (Front Left)"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor"
-    },
-    "alarm_contact_window_front_right": {
-      "id": "alarm_contact_window_front_right",
-      "type": "boolean",
-      "title": {
-        "en": "Window (Front Right)"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor"
-    },
-    "alarm_contact_window_rear_left": {
-      "id": "alarm_contact_window_rear_left",
-      "type": "boolean",
-      "title": {
-        "en": "Window (Rear Left)"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor"
-    },
-    "alarm_contact_window_rear_right": {
-      "id": "alarm_contact_window_rear_right",
-      "type": "boolean",
-      "title": {
-        "en": "Window (Rear Right)"
       },
       "getable": true,
       "setable": false,
@@ -354,15 +302,6 @@
         }
       ]
     },
-    "backup_capable": {
-      "type": "boolean",
-      "title": {
-        "en": "Backup Capable"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor"
-    },
     "backup_reserve": {
       "type": "number",
       "title": {
@@ -380,7 +319,6 @@
       "step": 0.01
     },
     "button_flash_lights": {
-      "id": "button_flash_lights",
       "type": "boolean",
       "title": {
         "en": "Flash Lights"
@@ -390,7 +328,6 @@
       "uiComponent": "button"
     },
     "button_homelink": {
-      "id": "button_homelink",
       "type": "boolean",
       "title": {
         "en": "HomeLink"
@@ -400,7 +337,6 @@
       "uiComponent": "button"
     },
     "button_honk_horn": {
-      "id": "button_honk_horn",
       "type": "boolean",
       "title": {
         "en": "Honk Horn"
@@ -410,7 +346,6 @@
       "uiComponent": "button"
     },
     "button_keyless_driving": {
-      "id": "button_keyless_driving",
       "type": "boolean",
       "title": {
         "en": "Keyless Driving"
@@ -420,7 +355,6 @@
       "uiComponent": "button"
     },
     "button_wake_up": {
-      "id": "button_wake_up",
       "type": "boolean",
       "title": {
         "en": "Wake Up"
@@ -439,7 +373,6 @@
       "uiComponent": "toggle"
     },
     "charge_port_door": {
-      "id": "charge_port_door",
       "type": "boolean",
       "title": {
         "en": "Charge Port Door"
@@ -449,7 +382,6 @@
       "uiComponent": "toggle"
     },
     "charge_port_latch": {
-      "id": "charge_port_latch",
       "type": "boolean",
       "title": {
         "en": "Charge Port Latch"
@@ -459,7 +391,6 @@
       "uiComponent": "toggle"
     },
     "charge_state": {
-      "id": "charge_state",
       "type": "boolean",
       "title": {
         "en": "Charging"
@@ -479,7 +410,6 @@
       "icon": "/assets/icon.svg"
     },
     "defrost_mode": {
-      "id": "defrost_mode",
       "type": "boolean",
       "title": {
         "en": "Defrost"
@@ -489,7 +419,6 @@
       "uiComponent": "toggle"
     },
     "frunk": {
-      "id": "frunk",
       "type": "boolean",
       "title": {
         "en": "Frunk"
@@ -497,60 +426,6 @@
       "getable": true,
       "setable": true,
       "uiComponent": "toggle"
-    },
-    "grid_services_active": {
-      "type": "boolean",
-      "title": {
-        "en": "Grid Services Active"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor"
-    },
-    "grid_services_enabled": {
-      "type": "boolean",
-      "title": {
-        "en": "Grid Services Enabled"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor"
-    },
-    "measure_grid_exported": {
-      "type": "number",
-      "title": {
-        "en": "Grid Exported"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "units": {
-        "en": "W"
-      }
-    },
-    "measure_grid_services_power": {
-      "type": "number",
-      "title": {
-        "en": "Grid Services Power"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "units": {
-        "en": "W"
-      }
-    },
-    "measure_home_usage": {
-      "type": "number",
-      "title": {
-        "en": "Home Usage"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "units": {
-        "en": "W"
-      }
     },
     "measure_power_battery": {
       "type": "number",
@@ -601,7 +476,6 @@
       }
     },
     "measure_range": {
-      "id": "measure_range",
       "type": "number",
       "title": {
         "en": "Range"
@@ -613,20 +487,7 @@
       "setable": false,
       "uiComponent": "sensor"
     },
-    "measure_solar_generated": {
-      "type": "number",
-      "title": {
-        "en": "Solar Generated"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "units": {
-        "en": "kWh"
-      }
-    },
     "measure_temperature_outside": {
-      "id": "measure_temperature_outside",
       "type": "number",
       "title": {
         "en": "Outside Temperature"
@@ -637,41 +498,6 @@
       "getable": true,
       "setable": false,
       "uiComponent": "sensor"
-    },
-    "measure_version": {
-      "type": "string",
-      "title": {
-        "en": "Version"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor"
-    },
-    "measure_vpp_backup_reserve": {
-      "type": "number",
-      "title": {
-        "en": "VPP Backup Reserve"
-      },
-      "getable": true,
-      "setable": false,
-      "uiComponent": "sensor",
-      "units": {
-        "en": "%"
-      }
-    },
-    "off_grid_reserve": {
-      "type": "number",
-      "title": {
-        "en": "Off Grid Reserve"
-      },
-      "getable": true,
-      "setable": true,
-      "uiComponent": "slider",
-      "units": {
-        "en": "%"
-      },
-      "min": 0,
-      "max": 100
     },
     "operation_mode": {
       "type": "enum",
@@ -703,7 +529,6 @@
       ]
     },
     "seat_heater_front_left": {
-      "id": "seat_heater_front_left",
       "type": "enum",
       "title": {
         "en": "Seat Heater (Front Left)"
@@ -739,7 +564,6 @@
       ]
     },
     "seat_heater_front_right": {
-      "id": "seat_heater_front_right",
       "type": "enum",
       "title": {
         "en": "Seat Heater (Front Right)"
@@ -774,38 +598,7 @@
         }
       ]
     },
-    "seat_heater_rear_center": {
-      "id": "seat_heater_rear_center",
-      "type": "boolean",
-      "title": {
-        "en": "Seat Heater (Rear Center)"
-      },
-      "getable": true,
-      "setable": true,
-      "uiComponent": "toggle"
-    },
-    "seat_heater_rear_left": {
-      "id": "seat_heater_rear_left",
-      "type": "boolean",
-      "title": {
-        "en": "Seat Heater (Rear Left)"
-      },
-      "getable": true,
-      "setable": true,
-      "uiComponent": "toggle"
-    },
-    "seat_heater_rear_right": {
-      "id": "seat_heater_rear_right",
-      "type": "boolean",
-      "title": {
-        "en": "Seat Heater (Rear Right)"
-      },
-      "getable": true,
-      "setable": true,
-      "uiComponent": "toggle"
-    },
     "sentry_mode": {
-      "id": "sentry_mode",
       "type": "boolean",
       "title": {
         "en": "Sentry Mode"
@@ -815,7 +608,6 @@
       "uiComponent": "toggle"
     },
     "steering_wheel_heater": {
-      "id": "steering_wheel_heater",
       "type": "enum",
       "title": {
         "en": "Steering Wheel Heater"
@@ -854,20 +646,9 @@
       "uiComponent": "toggle"
     },
     "trunk": {
-      "id": "trunk",
       "type": "boolean",
       "title": {
         "en": "Trunk"
-      },
-      "getable": true,
-      "setable": true,
-      "uiComponent": "toggle"
-    },
-    "valet_mode": {
-      "id": "valet_mode",
-      "type": "boolean",
-      "title": {
-        "en": "Valet Mode"
       },
       "getable": true,
       "setable": true,

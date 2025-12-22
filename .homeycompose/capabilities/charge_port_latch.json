@@ -1,5 +1,4 @@
 {
-  "id": "charge_port_latch",
   "type": "boolean",
   "title": {
     "en": "Charge Port Latch"

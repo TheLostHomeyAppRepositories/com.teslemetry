@@ -1,5 +1,4 @@
 {
-  "id": "button_wake_up",
   "type": "boolean",
   "title": {
     "en": "Wake Up"
