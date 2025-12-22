@@ -46,7 +46,7 @@
     "large": "{{driverAssetsPath}}/images/large.png",
     "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
   },
-  "platforms": ["local", "cloud"],
+  "platforms": ["local"],
   "pair": [
     {
       "id": "login_oauth2",

@@ -12,7 +12,7 @@
   "energy": {
     "evCharger": true
   },
-  "platforms": ["local", "cloud"],
+  "platforms": ["local"],
   "images": {
     "small": "{{driverAssetsPath}}/images/small.png",
     "large": "{{driverAssetsPath}}/images/large.png",
