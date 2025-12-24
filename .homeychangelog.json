@@ -7,5 +7,8 @@
   },
   "0.0.4": {
     "en": "Added flow cards, removed settings, and fixed windows."
+  },
+  "0.0.5": {
+    "en": "Fixed pairing errors, improved energy site icons, and filtered energy sites that dont have solar or battery."
   }
 }
