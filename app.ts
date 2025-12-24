@@ -44,7 +44,7 @@ export default class TeslemetryApp extends Homey.App {
         return;
       }
 
-      if (this.teslemetry) {
+      if (this.teslemetry && this.products) {
         // Is there a condition here where testing is invalid?
         return;
       }

@@ -28,8 +28,8 @@ const loadMeterCapabilities = [
 
 export const getCapabilities = (
   siteInfo: Awaited<ReturnType<TeslemetryEnergyApi["getSiteInfo"]>>["response"],
-): { deviceClass: string; capabilities: string[] } => {
-  let deviceClass = "other";
+) => {
+  let deviceClass: "solar" | "battery" | null = null;
   const capabilities = new Set<string>();
 
   if (siteInfo.components.solar) {

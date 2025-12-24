@@ -2,49 +2,48 @@ import type TeslemetryApp from "../../app.js";
 import TeslemetryDriver from "../../lib/TeslemetryDriver.js";
 import { getCapabilities } from "./capabilities.js";
 
-const icon: Record<string, { icon: string }> = {
-  powerwall: { icon: "powerwall.svg" },
-  solar: { icon: "solar.svg" },
+const icon: Record<string, string> = {
+  powerwall: "asset/powerwall.svg",
+  solar: "asset/solar.svg",
 };
 
 export default class PowerwallDriver extends TeslemetryDriver {
   async onPairListDevices() {
-    const app = this.homey.app as TeslemetryApp;
-
-    if (!app.isConfigured()) {
-      throw new Error(
-        "App not configured - please set up your Teslemetry access token in app settings",
-      );
-    }
-
-    const products = await app.getProducts();
+    const products = await this.homey.app.getProducts();
     if (!products) {
       throw new Error(
-        "Failed to load energy sites - check your access token in app settings",
+        "Failed to load products. Please restart the pairing process",
       );
     }
 
-    return await Promise.all(
-      Object.values(products.energySites)
-        .filter(({ metadata }) => !!metadata.access)
-        .map(async (site) => {
-          const { response: siteInfo } = await site.api.getSiteInfo();
-          const { deviceClass, capabilities } = getCapabilities(siteInfo);
+    return (
+      await Promise.all(
+        Object.values(products.energySites)
+          .filter(({ metadata }) => !!metadata.access)
+          .map(async (site) => {
+            const siteInfo = await site.api.getSiteInfo();
+            if (!siteInfo) return null;
 
-          return {
-            name: site.name,
-            data: {
-              id: site.id,
-            },
-            capabilities: Array.from(capabilities),
-            class: deviceClass,
-            energy: {
-              homeBattery: siteInfo.components.battery,
-            },
-            ...icon?.[deviceClass],
-          };
-        }),
-    );
+            const { deviceClass, capabilities } = getCapabilities(
+              siteInfo.response,
+            );
+            if (!deviceClass) return null;
+
+            return {
+              name: site.name,
+              data: {
+                id: site.id,
+              },
+              capabilities: Array.from(capabilities),
+              class: deviceClass,
+              energy: {
+                homeBattery: siteInfo.response.components.battery,
+              },
+              icon: icon[deviceClass],
+            };
+          }),
+      )
+    ).filter((device): device is NonNullable<typeof device> => device !== null);
   }
 }
 
