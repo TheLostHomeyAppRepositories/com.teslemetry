@@ -1,5 +1,5 @@
-import Homey from "homey";
 import crypto from "crypto";
+import type TeslemetryApp from "../app.js";
 
 export interface OAuth2Token {
   access_token: string;
@@ -20,7 +20,7 @@ export default class TeslemetryOAuth2Client {
   private token: OAuth2Token | null = null;
   private requestPromise: Promise<OAuth2Token> | null = null;
 
-  constructor(app: Homey.App) {
+  constructor(app: TeslemetryApp) {
     this.homey = app.homey;
     this.loadToken();
   }
@@ -126,7 +126,13 @@ export default class TeslemetryOAuth2Client {
 
     if (!response.ok) {
       const text = await response.text();
-      throw new Error(`Token request failed: ${response.status} ${text}`);
+      let errorData: any = { status: response.status, error: text };
+      try {
+        const json = JSON.parse(text);
+        if (json.error) errorData = { ...json, status: response.status };
+      } catch {}
+
+      (this.homey.app as any).handleApiError(errorData);
     }
 
     const data = (await response.json()) as any;

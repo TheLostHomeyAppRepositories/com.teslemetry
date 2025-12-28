@@ -107,33 +107,33 @@ export default class PowerwallDevice extends TeslemetryDevice {
       this.log(
         `Setting backup reserve to ${Math.round(value * 100)} (from ${value})`,
       );
-      await this.site.api.setBackupReserve(Math.round(value * 100));
+      await this.site.api
+        .setBackupReserve(Math.round(value * 100))
+        .catch(this.handleApiError);
     });
 
     this.registerCapabilityListener("allow_export", async (value) => {
       this.log(`Setting allow export to ${value}`);
-      await this.site.api.gridImportExport(
-        value,
-        this.getCapabilityValue("charge_from_grid"),
-      );
+      await this.site.api
+        .gridImportExport(value, this.getCapabilityValue("charge_from_grid"))
+        .catch(this.handleApiError);
     });
 
     this.registerCapabilityListener("operation_mode", async (value) => {
       this.log(`Setting operation mode to ${value}`);
-      await this.site.api.setOperationMode(value);
+      await this.site.api.setOperationMode(value).catch(this.handleApiError);
     });
 
     this.registerCapabilityListener("charge_from_grid", async (value) => {
       // When this is missing, its allowed
       this.log(`Setting charge from grid to ${!value}`);
-      await this.site.api.gridImportExport(
-        this.getCapabilityValue("allow_export"),
-        !value,
-      );
+      await this.site.api
+        .gridImportExport(this.getCapabilityValue("allow_export"), !value)
+        .catch(this.handleApiError);
     });
 
     this.registerCapabilityListener("storm_watch", async (value) => {
-      await this.site.api.setStormMode(value);
+      await this.site.api.setStormMode(value).catch(this.handleApiError);
     });
   }
 

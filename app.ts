@@ -31,46 +31,55 @@ export default class TeslemetryApp extends Homey.App {
     });
 
     // Initialize the Teslemetry SDK connection using OAuth2 token
-    await this.initializeTeslemetry();
+    await this.initializeTeslemetry().catch((error) => {
+      this.error("Failed to initialize Teslemetry during app init:", error);
+    });
   }
 
   /**
    * Initialize Teslemetry connection with OAuth2 token
+   * @throws Error if initialization fails
    */
   private async initializeTeslemetry(): Promise<void> {
-    try {
-      if (!this.oauth.hasValidToken()) {
-        this.log("No OAuth2 token available. User needs to authenticate.");
-        return;
-      }
+    if (!this.oauth.hasValidToken()) {
+      throw new Error("No OAuth2 token available. User needs to authenticate.");
+    }
 
-      if (this.teslemetry && this.products) {
-        // Is there a condition here where testing is invalid?
-        return;
-      }
+    if (this.teslemetry && this.products) {
+      // Is there a condition here where testing is invalid?
+      return;
+    }
 
-      this.log("Initializing Teslemetry with OAuth2 token...");
-      this.teslemetry = new Teslemetry(this.oauth.getAccessToken, {
-        logger: this.logger,
-        stream: {
-          cache: true,
-        },
-      });
-      this.products = await this.teslemetry.createProducts();
+    this.log("Initializing Teslemetry with OAuth2 token...");
+    this.teslemetry = new Teslemetry(this.oauth.getAccessToken, {
+      logger: this.logger,
+      stream: {
+        cache: true,
+      },
+    });
+    this.products = await this.teslemetry
+      .createProducts()
+      .catch(this.handleApiError);
 
-      this.teslemetry.sse.connect();
+    this.teslemetry.sse.connect();
 
-      const vehicleCount = Object.keys(this.products.vehicles).length;
-      const energyCount = Object.keys(this.products.energySites).length;
+    const vehicleCount = Object.keys(this.products.vehicles).length;
+    const energyCount = Object.keys(this.products.energySites).length;
 
-      this.log(
-        `Teslemetry initialized successfully! Found ${vehicleCount} vehicles and ${energyCount} energy sites.`,
-      );
-    } catch (error) {
-      this.error("Failed to initialize Teslemetry:", error);
+    this.log(
+      `Teslemetry initialized successfully! Found ${vehicleCount} vehicles and ${energyCount} energy sites.`,
+    );
+  }
+
+  /**
+   * Clean up Teslemetry connection and resources
+   */
+  cleanup(): void {
+    if (this.teslemetry) {
+      this.teslemetry.sse.close();
       this.teslemetry = undefined;
       this.products = undefined;
-      // Don't throw here to prevent app crash on init
+      this.log("Teslemetry connection cleaned up");
     }
   }
 
@@ -86,11 +95,7 @@ export default class TeslemetryApp extends Homey.App {
     this.initializationPromise = (async () => {
       try {
         // Clean up existing connection
-        if (this.teslemetry) {
-          this.teslemetry.sse.close();
-          this.teslemetry = undefined;
-          this.products = undefined;
-        }
+        this.cleanup();
 
         // Initialize with new OAuth2 session
         await this.initializeTeslemetry();
@@ -130,4 +135,26 @@ export default class TeslemetryApp extends Homey.App {
   isConfigured(): boolean {
     return this.oauth.hasValidToken() && !!this.teslemetry && !!this.products;
   }
+
+  public handleApiError = (error: any): never => {
+    if (error.status === 401 || error.status === "401") {
+      const msg = this.homey.__("error.401");
+      this.error(msg);
+      throw new Error(msg);
+    } else if (error.status === 402 || error.status === "402") {
+      const msg = this.homey.__("error.402");
+      this.error(msg);
+      throw new Error(msg);
+    }
+
+    if (error.error && typeof error.error === "string") {
+      const key = `error.${error.error}`;
+      const translated = this.homey.__(key);
+      if (translated && translated !== key) {
+        throw new Error(translated);
+      }
+    }
+
+    throw error;
+  };
 }

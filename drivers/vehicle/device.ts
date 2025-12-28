@@ -164,43 +164,51 @@ export default class VehicleDevice extends TeslemetryDevice {
 
     // Locked
     this.registerCapabilityListener("locked", async (value) => {
-      value ? this.vehicle.api.lockDoors() : this.vehicle.api.unlockDoors();
+      value
+        ? this.vehicle.api.lockDoors().catch(this.handleApiError)
+        : this.vehicle.api.unlockDoors().catch(this.handleApiError);
     });
 
     // Climate
     this.registerCapabilityListener("thermostat_mode", async (value) => {
       value === "auto"
-        ? this.vehicle.api.startAutoConditioning()
-        : this.vehicle.api.stopAutoConditioning();
+        ? this.vehicle.api.startAutoConditioning().catch(this.handleApiError)
+        : this.vehicle.api.stopAutoConditioning().catch(this.handleApiError);
     });
     this.registerCapabilityListener("target_temperature", async (value) => {
-      this.vehicle.api.setTemps(value, value);
+      this.vehicle.api.setTemps(value, value).catch(this.handleApiError);
     });
     this.registerCapabilityListener("defrost_mode", async (value) => {
-      this.vehicle.api.setPreconditioningMax(value, true);
+      this.vehicle.api
+        .setPreconditioningMax(value, true)
+        .catch(this.handleApiError);
     });
     this.registerCapabilityListener("steering_wheel_heater", async (value) => {
       switch (value) {
         case "0":
-          this.vehicle.api.setSteeringWheelHeater(false);
+          this.vehicle.api.setSteeringWheelHeater(false).catch(this.handleApiError);
           break;
         case "1":
-          this.vehicle.api.setSteeringWheelHeatLevel(1);
+          this.vehicle.api.setSteeringWheelHeatLevel(1).catch(this.handleApiError);
           //await this.vehicle.api.setSteeringWheelHeater(true);?
           break;
         case "3":
-          this.vehicle.api.setSteeringWheelHeatLevel(3);
+          this.vehicle.api.setSteeringWheelHeatLevel(3).catch(this.handleApiError);
           //await this.vehicle.api.setSteeringWheelHeater(true);?
           break;
       }
     });
     this.registerCapabilityListener("seat_heater_front_left", async (value) => {
-      this.vehicle.api.setSeatHeater("front_left", Number(value));
+      this.vehicle.api
+        .setSeatHeater("front_left", Number(value))
+        .catch(this.handleApiError);
     });
     this.registerCapabilityListener(
       "seat_heater_front_right",
       async (value) => {
-        this.vehicle.api.setSeatHeater("front_right", Number(value));
+        this.vehicle.api
+          .setSeatHeater("front_right", Number(value))
+          .catch(this.handleApiError);
       },
     );
     // Add rear heaters if API supports and IDs are known
@@ -208,53 +216,58 @@ export default class VehicleDevice extends TeslemetryDevice {
     // Charge
     this.registerCapabilityListener("charge_state", async (value) => {
       value
-        ? this.vehicle.api.startCharging()
-        : this.vehicle.api.stopCharging();
+        ? this.vehicle.api.startCharging().catch(this.handleApiError)
+        : this.vehicle.api.stopCharging().catch(this.handleApiError);
     });
     this.registerCapabilityListener("charge_port_door", async (value) => {
       value
-        ? this.vehicle.api.openChargePort()
-        : this.vehicle.api.closeChargePort();
+        ? this.vehicle.api.openChargePort().catch(this.handleApiError)
+        : this.vehicle.api.closeChargePort().catch(this.handleApiError);
     });
     // Sentry & Valet
     this.registerCapabilityListener("sentry_mode", async (value) => {
-      this.vehicle.api.setSentryMode(value);
+      this.vehicle.api.setSentryMode(value).catch(this.handleApiError);
     });
 
     // Doors/Frunk/Trunk
     this.registerCapabilityListener("frunk", async (value) => {
-      if (value) this.vehicle.api.actuateTrunk("front");
+      if (value)
+        this.vehicle.api.actuateTrunk("front").catch(this.handleApiError);
       // Cannot be closed
     });
     this.registerCapabilityListener("trunk", async (value) => {
-      this.vehicle.api.actuateTrunk("rear");
+      this.vehicle.api.actuateTrunk("rear").catch(this.handleApiError);
     });
     this.registerCapabilityListener("windowcoverings_closed", async (value) => {
       const { latitude, longitude } = this.vehicle.sse.cache?.data
         ?.Location || { latitude: 0, longitude: 0 }; // Replace with actual location if available
       value
-        ? this.vehicle.api.windowControl("close", latitude, longitude)
-        : this.vehicle.api.windowControl("vent", latitude, longitude);
+        ? this.vehicle.api
+            .windowControl("close", latitude, longitude)
+            .catch(this.handleApiError)
+        : this.vehicle.api
+            .windowControl("vent", latitude, longitude)
+            .catch(this.handleApiError);
     });
 
     // Buttons
     this.registerCapabilityListener("button_flash_lights", async () => {
-      this.vehicle.api.flashLights();
+      this.vehicle.api.flashLights().catch(this.handleApiError);
     });
     this.registerCapabilityListener("button_honk_horn", async () => {
-      this.vehicle.api.honkHorn();
+      this.vehicle.api.honkHorn().catch(this.handleApiError);
     });
     this.registerCapabilityListener("button_keyless_driving", async () => {
-      this.vehicle.api.remoteStart();
+      this.vehicle.api.remoteStart().catch(this.handleApiError);
     });
     this.registerCapabilityListener("button_homelink", async () => {
       // Needs lat/lon usually
       const lat = 0;
       const lon = 0;
-      this.vehicle.api.triggerHomelink(lat, lon);
+      this.vehicle.api.triggerHomelink(lat, lon).catch(this.handleApiError);
     });
     this.registerCapabilityListener("button_wake_up", async () => {
-      this.vehicle.api.wakeUp();
+      this.vehicle.api.wakeUp().catch(this.handleApiError);
     });
   }
 

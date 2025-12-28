@@ -28,4 +28,27 @@ export default class TeslemetryDevice extends Homey.Device {
     //this.log(`Setting capability ${capability} to ${value}`);
     return this.setCapabilityValue(capability, value).catch(this.error);
   }
+
+  protected handleApiError = (error: any): never => {
+    console.warn(error);
+    if (error.status === 401 || error.status === "401") {
+      const msg = this.homey.__("error.401");
+      this.setUnavailable(msg).catch(this.error);
+      throw new Error(msg);
+    } else if (error.status === 402 || error.status === "402") {
+      const msg = this.homey.__("error.402");
+      this.setUnavailable(msg).catch(this.error);
+      throw new Error(msg);
+    }
+
+    if (error.error && typeof error.error === "string") {
+      const key = `error.${error.error}`;
+      const translated = this.homey.__(key);
+      if (translated && translated !== key) {
+        throw new Error(translated);
+      }
+    }
+
+    throw error;
+  };
 }

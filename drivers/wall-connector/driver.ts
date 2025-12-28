@@ -1,4 +1,3 @@
-import type TeslemetryApp from "../../app.js";
 import TeslemetryDriver from "../../lib/TeslemetryDriver.js";
 
 export default class WallConnectorDriver extends TeslemetryDriver {
@@ -6,7 +5,7 @@ export default class WallConnectorDriver extends TeslemetryDriver {
     const products = await this.homey.app.getProducts();
     if (!products) {
       throw new Error(
-        "Failed to load products. Please restart the pairing process",
+        "Failed to load wall connectors from Teslemetry. Please check your connection and try again.",
       );
     }
 
