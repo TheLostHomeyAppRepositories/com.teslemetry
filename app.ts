@@ -40,7 +40,7 @@ export default class TeslemetryApp extends Homey.App {
 
     // Initialize the Teslemetry SDK connection using OAuth2 token
     await this.initializeTeslemetry().catch((error) => {
-      this.error("Failed to initialize Teslemetry during app init:", error);
+      this.log(error.message);
     });
   }
 

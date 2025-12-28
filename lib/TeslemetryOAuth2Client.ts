@@ -126,18 +126,14 @@ export default class TeslemetryOAuth2Client {
       body: JSON.stringify(body),
     });
 
+    const data: any = await response.json();
+
     if (!response.ok) {
-      const text = await response.text();
-      let errorData: any = { status: response.status, error: text };
-      try {
-        const json = JSON.parse(text);
-        if (json.error) errorData = { ...json, status: response.status };
-      } catch {}
-
-      this.app.handleApiError(errorData);
+      if (data.error === "invalid_token") {
+        this.clearToken();
+      }
+      this.app.handleApiError(data);
     }
-
-    const data = (await response.json()) as any;
 
     if (!data.access_token) {
       throw new Error("Invalid token response from server");
@@ -174,7 +170,11 @@ export default class TeslemetryOAuth2Client {
   };
 
   hasValidToken(): boolean {
-    return !!this.token;
+    return (
+      !!this.token &&
+      !!this.token.expires_at &&
+      Date.now() < this.token.expires_at
+    );
   }
 
   clearToken() {
