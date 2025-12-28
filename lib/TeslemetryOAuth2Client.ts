@@ -16,17 +16,19 @@ export default class TeslemetryOAuth2Client {
   static CLIENT_ID = "homey";
   static SETTINGS_KEY = "teslemetry_oauth2_token";
 
-  private homey;
+  private app: TeslemetryApp;
   private token: OAuth2Token | null = null;
   private requestPromise: Promise<OAuth2Token> | null = null;
 
   constructor(app: TeslemetryApp) {
-    this.homey = app.homey;
+    this.app = app;
     this.loadToken();
   }
 
   private loadToken() {
-    const data = this.homey.settings.get(TeslemetryOAuth2Client.SETTINGS_KEY);
+    const data = this.app.homey.settings.get(
+      TeslemetryOAuth2Client.SETTINGS_KEY,
+    );
     if (data) {
       this.token = data;
     }
@@ -38,8 +40,8 @@ export default class TeslemetryOAuth2Client {
       token.expires_at = Date.now() + token.expires_in * 1000;
     }
     this.token = token;
-    this.homey.settings.set(TeslemetryOAuth2Client.SETTINGS_KEY, token);
-    this.homey.emit("oauth2:token_saved", token);
+    this.app.homey.settings.set(TeslemetryOAuth2Client.SETTINGS_KEY, token);
+    this.app.homey.emit("oauth2:token_saved", token);
   }
 
   /**
@@ -132,7 +134,7 @@ export default class TeslemetryOAuth2Client {
         if (json.error) errorData = { ...json, status: response.status };
       } catch {}
 
-      (this.homey.app as any).handleApiError(errorData);
+      this.app.handleApiError(errorData);
     }
 
     const data = (await response.json()) as any;
@@ -164,7 +166,7 @@ export default class TeslemetryOAuth2Client {
 
     // Refresh if expiring in less than a minute
     if (this.token.expires_at && Date.now() + 60_000 > this.token.expires_at) {
-      this.homey.log("Teslemetry token expiring soon, refreshing...");
+      this.app.log("Teslemetry token expiring soon, refreshing...");
       await this.refreshToken();
     }
 
@@ -177,6 +179,6 @@ export default class TeslemetryOAuth2Client {
 
   clearToken() {
     this.token = null;
-    this.homey.settings.unset(TeslemetryOAuth2Client.SETTINGS_KEY);
+    this.app.homey.settings.unset(TeslemetryOAuth2Client.SETTINGS_KEY);
   }
 }

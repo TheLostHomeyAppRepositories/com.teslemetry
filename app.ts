@@ -3,6 +3,14 @@
 import Homey from "homey";
 import { Products, Teslemetry } from "@teslemetry/api";
 import TeslemetryOAuth2Client from "./lib/TeslemetryOAuth2Client.js";
+import type { TeslemetryApiError } from "./@types/error.d.ts";
+
+const errors = [
+  "invalid_token",
+  "subscription_required",
+  "could_not_wake_vehicle",
+  "insufficient_credits",
+];
 
 export default class TeslemetryApp extends Homey.App {
   public oauth!: TeslemetryOAuth2Client;
@@ -136,25 +144,17 @@ export default class TeslemetryApp extends Homey.App {
     return this.oauth.hasValidToken() && !!this.teslemetry && !!this.products;
   }
 
-  public handleApiError = (error: any): never => {
-    if (error.status === 401 || error.status === "401") {
-      const msg = this.homey.__("error.401");
-      this.error(msg);
-      throw new Error(msg);
-    } else if (error.status === 402 || error.status === "402") {
-      const msg = this.homey.__("error.402");
-      this.error(msg);
-      throw new Error(msg);
+  public handleApiError = ({
+    error,
+    error_description,
+  }: TeslemetryApiError): never => {
+    const key = `error.${error}`;
+    const translation = this.homey.__(key);
+    if (translation && translation !== key) {
+      this.error(translation);
+      throw new Error(translation);
     }
-
-    if (error.error && typeof error.error === "string") {
-      const key = `error.${error.error}`;
-      const translated = this.homey.__(key);
-      if (translated && translated !== key) {
-        throw new Error(translated);
-      }
-    }
-
-    throw error;
+    this.error(error_description);
+    throw new Error(error_description);
   };
 }

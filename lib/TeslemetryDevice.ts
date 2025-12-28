@@ -1,5 +1,6 @@
 import Homey from "homey";
 import type TeslemetryApp from "../app.js";
+import { TeslemetryApiError } from "../@types/error.js";
 
 export default class TeslemetryDevice extends Homey.Device {
   declare homey: Homey.Device["homey"] & {
@@ -29,26 +30,23 @@ export default class TeslemetryDevice extends Homey.Device {
     return this.setCapabilityValue(capability, value).catch(this.error);
   }
 
-  protected handleApiError = (error: any): never => {
-    console.warn(error);
-    if (error.status === 401 || error.status === "401") {
-      const msg = this.homey.__("error.401");
-      this.setUnavailable(msg).catch(this.error);
-      throw new Error(msg);
-    } else if (error.status === 402 || error.status === "402") {
-      const msg = this.homey.__("error.402");
-      this.setUnavailable(msg).catch(this.error);
-      throw new Error(msg);
-    }
-
-    if (error.error && typeof error.error === "string") {
-      const key = `error.${error.error}`;
-      const translated = this.homey.__(key);
-      if (translated && translated !== key) {
-        throw new Error(translated);
+  protected handleApiError = ({
+    error,
+    error_description,
+  }: TeslemetryApiError): never => {
+    const key = `error.${error}`;
+    const translation = this.homey.__(key);
+    if (translation && translation !== key) {
+      this.error(translation);
+      if (error === "invalid_token" || error === "subscription_required") {
+        this.setUnavailable(translation).catch(this.error);
       }
+      throw new Error(translation);
     }
-
-    throw error;
+    this.error(error_description);
+    if (error === "invalid_token" || error === "subscription_required") {
+      this.setUnavailable(error_description).catch(this.error);
+    }
+    throw new Error(error_description);
   };
 }
