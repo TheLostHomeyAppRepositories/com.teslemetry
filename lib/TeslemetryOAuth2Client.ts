@@ -129,8 +129,11 @@ export default class TeslemetryOAuth2Client {
     const data: any = await response.json();
 
     if (!response.ok) {
-      if (data.error === "invalid_token") {
+      if (data.error === "invalid_refresh_token") {
         this.clearToken();
+      }
+      if (data.error === "invalid_token") {
+        this.refreshToken();
       }
       this.app.handleApiError(data);
     }
