@@ -10,5 +10,8 @@
   },
   "0.0.5": {
     "en": "Fixed pairing errors, improved energy site icons, and filtered energy sites that dont have solar or battery."
+  },
+  "0.0.6": {
+    "en": "Improved error handling with translation"
   }
 }
