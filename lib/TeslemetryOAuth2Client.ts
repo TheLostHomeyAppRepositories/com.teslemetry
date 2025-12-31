@@ -112,7 +112,7 @@ export default class TeslemetryOAuth2Client {
   private async requestToken(body: any): Promise<OAuth2Token> {
     const name = await this.app.homey.api
       .get("/manager/system/name")
-      .catch(null);
+      .catch(() => null);
     this.app.log("name is", name);
     body.name = name;
 
