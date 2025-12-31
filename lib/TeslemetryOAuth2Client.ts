@@ -23,10 +23,17 @@ export default class TeslemetryOAuth2Client {
   constructor(app: TeslemetryApp) {
     this.app = app;
     this.loadToken();
+    this.getName();
   }
 
   private async getName(): Promise<string> {
-    return "Homey";
+    return this.app.homey.api
+      .get("/manager/system/name")
+      .catch((e) => {
+        this.app.error(e);
+        return null;
+      })
+      .finally(this.app.log);
   }
 
   private loadToken() {
