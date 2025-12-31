@@ -23,6 +23,17 @@ export default class TeslemetryOAuth2Client {
   constructor(app: TeslemetryApp) {
     this.app = app;
     this.loadToken();
+    this.getName();
+  }
+
+  private async getName(): Promise<string> {
+    return this.app.homey.api
+      .get("/manager/system/name")
+      .catch((e) => {
+        this.app.error(e);
+        return null;
+      })
+      .finally(this.app.log);
   }
 
   private loadToken() {
@@ -86,6 +97,7 @@ export default class TeslemetryOAuth2Client {
       code: code,
       code_verifier: codeVerifier,
       redirect_uri: TeslemetryOAuth2Client.REDIRECT_URL,
+      name: await this.getName(),
     };
 
     return this.requestToken(body);
@@ -102,6 +114,7 @@ export default class TeslemetryOAuth2Client {
       grant_type: "refresh_token",
       client_id: TeslemetryOAuth2Client.CLIENT_ID,
       refresh_token: this.token.refresh_token,
+      name: await this.getName(),
     };
     return this.requestToken(body);
   }
@@ -110,12 +123,6 @@ export default class TeslemetryOAuth2Client {
    * Return the existing token request or create a new one
    */
   private async requestToken(body: any): Promise<OAuth2Token> {
-    const name = await this.app.homey.api
-      .get("/manager/system/name")
-      .catch(() => null);
-    this.app.log("name is", name);
-    body.name = name;
-
     this.requestPromise ??= this._requestToken(body);
     return this.requestPromise.finally(() => {
       this.requestPromise = null;
