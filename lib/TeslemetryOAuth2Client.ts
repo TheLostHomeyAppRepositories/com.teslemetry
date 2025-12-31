@@ -23,17 +23,17 @@ export default class TeslemetryOAuth2Client {
   constructor(app: TeslemetryApp) {
     this.app = app;
     this.loadToken();
-    this.getName();
+    this.getName().catch(this.app.error);
   }
 
   private async getName(): Promise<string> {
-    return this.app.homey.api
-      .get("/manager/system/name")
-      .catch((e) => {
-        this.app.error(e);
-        return null;
-      })
-      .finally(this.app.log);
+    try {
+      const name = await this.app.homey.api.get("/manager/system/name");
+      return name || "Homey";
+    } catch (e: any) {
+      this.app.error("Failed to get system name:", e.message);
+      return "Homey";
+    }
   }
 
   private loadToken() {
