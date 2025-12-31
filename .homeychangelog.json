@@ -13,5 +13,8 @@
   },
   "0.0.6": {
     "en": "Improved error handling with translation"
+  },
+  "0.0.7": {
+    "en": "Bump the Teslemetry SDK to fix a crash"
   }
 }
