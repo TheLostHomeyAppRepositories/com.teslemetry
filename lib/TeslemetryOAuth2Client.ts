@@ -110,6 +110,12 @@ export default class TeslemetryOAuth2Client {
    * Return the existing token request or create a new one
    */
   private async requestToken(body: any): Promise<OAuth2Token> {
+    const name = await this.app.homey.api
+      .get("/manager/system/name")
+      .catch(null);
+    this.app.log("name is", name);
+    body.name = name;
+
     this.requestPromise ??= this._requestToken(body);
     return this.requestPromise.finally(() => {
       this.requestPromise = null;
@@ -181,6 +187,7 @@ export default class TeslemetryOAuth2Client {
   }
 
   clearToken() {
+    this.app.error("OAuth credentials are being removed");
     this.token = null;
     this.app.homey.settings.unset(TeslemetryOAuth2Client.SETTINGS_KEY);
   }
