@@ -1,4 +1,8 @@
 {
+  "fileFiltering": {
+    "respectGitIgnore": false,
+    "enableRecursiveFileSearch": true
+  },
   "mcpServers": {
     "homey-docs": {
       "command": "npx",

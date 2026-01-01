@@ -22,7 +22,7 @@
     "en": "Adds support for Tesla vehicles and energy products through Teslemetry"
   },
   "category": ["energy"],
-  "permissions": ["homey:manager:api"],
+  "permissions": [],
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",
