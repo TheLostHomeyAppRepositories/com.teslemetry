@@ -36,10 +36,10 @@ export default class GatewayDevice extends TeslemetryDevice {
       if (!data) return;
 
       this.update("measure_power", data.grid_power);
-      this.update("measure_power_load", data.load_power);
-      this.update("alarm_off_grid", gridStatusMap.get(data.grid_status));
+      this.update("measure_power.load", data.load_power);
+      this.update("alarm_generic.off_grid", gridStatusMap.get(data.grid_status));
       this.update(
-        "alarm_island_status",
+        "alarm_generic.island",
         islandStatusMap.get(data.island_status),
       );
     });

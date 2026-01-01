@@ -31,8 +31,8 @@ export default class VehicleDriver extends TeslemetryDriver {
             vin: data.vin,
           },
           capabilitiesOptions: {
-            frunk: { setable: data.metadata.config?.can_actuate_trunks },
-            trunk: { setable: data.metadata.config?.can_actuate_trunks },
+            "onoff.frunk": { setable: data.metadata.config?.can_actuate_trunks },
+            "onoff.trunk": { setable: data.metadata.config?.can_actuate_trunks },
           },
           ...icon?.[data.vin[3]],
         }));

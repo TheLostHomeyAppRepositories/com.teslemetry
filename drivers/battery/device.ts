@@ -33,7 +33,7 @@ export default class PowerwallDevice extends TeslemetryDevice {
         "measure_power",
         data.battery_power !== undefined ? data.battery_power * -1 : undefined,
       );
-      this.update("alarm_storm_watch_active", data.storm_mode_active);
+      this.update("alarm_generic.storm", data.storm_mode_active);
     });
 
     this.site.api.on("siteInfo", async (siteInfo) => {
@@ -55,11 +55,11 @@ export default class PowerwallDevice extends TeslemetryDevice {
           : "battery_ok",
       );
       this.update(
-        "charge_from_grid",
+        "onoff.charge_grid",
         // When this is missing, its allowed
         !data.components.disallow_charge_from_grid_with_solar_installed,
       );
-      this.update("storm_watch", data.user_settings.storm_mode_enabled);
+      this.update("onoff.storm", data.user_settings.storm_mode_enabled);
     });
 
     this.site.api.on("energyHistory", async (energyHistory) => {
@@ -103,7 +103,7 @@ export default class PowerwallDevice extends TeslemetryDevice {
     this.registerCapabilityListener("allow_export", async (value) => {
       this.log(`Setting allow export to ${value}`);
       await this.site.api
-        .gridImportExport(value, this.getCapabilityValue("charge_from_grid"))
+        .gridImportExport(value, this.getCapabilityValue("onoff.charge_grid"))
         .catch(this.handleApiError);
     });
 
@@ -112,7 +112,7 @@ export default class PowerwallDevice extends TeslemetryDevice {
       await this.site.api.setOperationMode(value).catch(this.handleApiError);
     });
 
-    this.registerCapabilityListener("charge_from_grid", async (value) => {
+    this.registerCapabilityListener("onoff.charge_grid", async (value) => {
       // When this is missing, its allowed
       this.log(`Setting charge from grid to ${!value}`);
       await this.site.api
@@ -120,7 +120,7 @@ export default class PowerwallDevice extends TeslemetryDevice {
         .catch(this.handleApiError);
     });
 
-    this.registerCapabilityListener("storm_watch", async (value) => {
+    this.registerCapabilityListener("onoff.storm", async (value) => {
       await this.site.api.setStormMode(value).catch(this.handleApiError);
     });
   }

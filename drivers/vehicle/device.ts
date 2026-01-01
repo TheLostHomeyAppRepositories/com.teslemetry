@@ -44,13 +44,13 @@ export default class VehicleDevice extends TeslemetryDevice {
       this.update("measure_battery", value),
     );
     this.vehicle.sse.onSignal("EstBatteryRange", (value) =>
-      this.update("measure_range", value),
+      this.update("measure_distance.range", value),
     );
 
     // Charging
     this.vehicle.sse.onSignal("DetailedChargeState", (value) =>
       this.update(
-        "charge_state",
+        "evcharger_charging",
         value === "DetailedChargeStateStarting" ||
           value === "DetailedChargeStateCharging",
       ),
@@ -83,16 +83,16 @@ export default class VehicleDevice extends TeslemetryDevice {
       this.update("locked", value),
     );
     this.vehicle.sse.onSignal("SentryMode", (value) => {
-      this.update("sentry_mode", value !== "SentryModeStateOff");
+      this.update("onoff.sentry", value !== "SentryModeStateOff");
       this.update("alarm_motion", value === "SentryModeStatePanic");
     });
 
     this.vehicle.sse.onSignal("ChargePortLatch", (value) =>
       // 'Engaged' -> Locked?
-      this.update("charge_port_latch", chargePortLatchMap.get(value)),
+      this.update("locked.charge_latch", chargePortLatchMap.get(value)),
     );
     this.vehicle.sse.onSignal("ChargePortDoorOpen", (value) =>
-      this.update("charge_port_door", value),
+      this.update("onoff.charge_port", value),
     );
 
     // Climate
@@ -109,33 +109,33 @@ export default class VehicleDevice extends TeslemetryDevice {
       this.update("measure_temperature", value),
     );
     this.vehicle.sse.onSignal("OutsideTemp", (value) =>
-      this.update("measure_temperature_outside", value),
+      this.update("measure_temperature.outside", value),
     );
     this.vehicle.sse.onSignal("DefrostMode", (value) =>
-      this.update("defrost_mode", defrostModeMap.get(value)),
+      this.update("onoff.defrost", defrostModeMap.get(value)),
     );
     this.vehicle.sse.onSignal("HvacSteeringWheelHeatLevel", (value) =>
       this.update("steering_wheel_heater", String(value)),
     );
     this.vehicle.sse.onSignal("SeatHeaterLeft", (value) =>
-      this.update("seat_heater_front_left", String(value)),
+      this.update("seat_heater.front_left", String(value)),
     );
     this.vehicle.sse.onSignal("SeatHeaterRight", (value) =>
-      this.update("seat_heater_front_right", String(value)),
+      this.update("seat_heater.front_right", String(value)),
     );
 
     // Doors & Windows (Assuming Signal names)
     this.vehicle.sse.onSignal("DoorState", (value) => {
       if (isBool(value?.DriverFront))
-        this.update("alarm_contact_door_front_left", value.DriverFront);
+        this.update("alarm_contact.fl", value.DriverFront);
       if (isBool(value?.PassengerFront))
-        this.update("alarm_contact_door_front_right", value.PassengerFront);
+        this.update("alarm_contact.fr", value.PassengerFront);
       if (isBool(value?.DriverRear))
-        this.update("alarm_contact_door_rear_left", value.DriverRear);
+        this.update("alarm_contact.rl", value.DriverRear);
       if (isBool(value?.PassengerRear))
-        this.update("alarm_contact_door_rear_right", value.PassengerRear);
-      if (isBool(value?.TrunkFront)) this.update("frunk", value.TrunkFront);
-      if (isBool(value?.TrunkRear)) this.update("trunk", value.TrunkRear);
+        this.update("alarm_contact.rr", value.PassengerRear);
+      if (isBool(value?.TrunkFront)) this.update("onoff.frunk", value.TrunkFront);
+      if (isBool(value?.TrunkRear)) this.update("onoff.trunk", value.TrunkRear);
     });
 
     const handleWindow = () => {
@@ -172,7 +172,7 @@ export default class VehicleDevice extends TeslemetryDevice {
     this.registerCapabilityListener("target_temperature", async (value) => {
       this.vehicle.api.setTemps(value, value).catch(this.handleApiError);
     });
-    this.registerCapabilityListener("defrost_mode", async (value) => {
+    this.registerCapabilityListener("onoff.defrost", async (value) => {
       this.vehicle.api
         .setPreconditioningMax(value, true)
         .catch(this.handleApiError);
@@ -198,13 +198,13 @@ export default class VehicleDevice extends TeslemetryDevice {
           break;
       }
     });
-    this.registerCapabilityListener("seat_heater_front_left", async (value) => {
+    this.registerCapabilityListener("seat_heater.front_left", async (value) => {
       this.vehicle.api
         .setSeatHeater("front_left", Number(value))
         .catch(this.handleApiError);
     });
     this.registerCapabilityListener(
-      "seat_heater_front_right",
+      "seat_heater.front_right",
       async (value) => {
         this.vehicle.api
           .setSeatHeater("front_right", Number(value))
@@ -214,28 +214,28 @@ export default class VehicleDevice extends TeslemetryDevice {
     // Add rear heaters if API supports and IDs are known
 
     // Charge
-    this.registerCapabilityListener("charge_state", async (value) => {
+    this.registerCapabilityListener("evcharger_charging", async (value) => {
       value
         ? this.vehicle.api.startCharging().catch(this.handleApiError)
         : this.vehicle.api.stopCharging().catch(this.handleApiError);
     });
-    this.registerCapabilityListener("charge_port_door", async (value) => {
+    this.registerCapabilityListener("onoff.charge_port", async (value) => {
       value
         ? this.vehicle.api.openChargePort().catch(this.handleApiError)
         : this.vehicle.api.closeChargePort().catch(this.handleApiError);
     });
     // Sentry & Valet
-    this.registerCapabilityListener("sentry_mode", async (value) => {
+    this.registerCapabilityListener("onoff.sentry", async (value) => {
       this.vehicle.api.setSentryMode(value).catch(this.handleApiError);
     });
 
     // Doors/Frunk/Trunk
-    this.registerCapabilityListener("frunk", async (value) => {
+    this.registerCapabilityListener("onoff.frunk", async (value) => {
       if (value)
         this.vehicle.api.actuateTrunk("front").catch(this.handleApiError);
       // Cannot be closed
     });
-    this.registerCapabilityListener("trunk", async (value) => {
+    this.registerCapabilityListener("onoff.trunk", async (value) => {
       this.vehicle.api.actuateTrunk("rear").catch(this.handleApiError);
     });
     this.registerCapabilityListener("windowcoverings_closed", async (value) => {
@@ -251,22 +251,22 @@ export default class VehicleDevice extends TeslemetryDevice {
     });
 
     // Buttons
-    this.registerCapabilityListener("button_flash_lights", async () => {
+    this.registerCapabilityListener("button.flash", async () => {
       this.vehicle.api.flashLights().catch(this.handleApiError);
     });
-    this.registerCapabilityListener("button_honk_horn", async () => {
+    this.registerCapabilityListener("button.honk", async () => {
       this.vehicle.api.honkHorn().catch(this.handleApiError);
     });
-    this.registerCapabilityListener("button_keyless_driving", async () => {
+    this.registerCapabilityListener("button.keyless", async () => {
       this.vehicle.api.remoteStart().catch(this.handleApiError);
     });
-    this.registerCapabilityListener("button_homelink", async () => {
+    this.registerCapabilityListener("button.homelink", async () => {
       // Needs lat/lon usually
       const lat = 0;
       const lon = 0;
       this.vehicle.api.triggerHomelink(lat, lon).catch(this.handleApiError);
     });
-    this.registerCapabilityListener("button_wake_up", async () => {
+    this.registerCapabilityListener("button.wakeup", async () => {
       this.vehicle.api.wakeUp().catch(this.handleApiError);
     });
   }

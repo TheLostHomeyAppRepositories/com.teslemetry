@@ -17,19 +17,19 @@ export default class TeslemetryDevice extends Homey.Device {
     const driverCapabilities = this.driver.manifest.capabilities || [];
     const deviceCapabilities = this.getCapabilities();
 
-    // Add missing capabilities
-    for (const capability of driverCapabilities) {
-      if (!deviceCapabilities.includes(capability)) {
-        this.log(`Adding capability ${capability}`);
-        await this.addCapability(capability);
-      }
-    }
-
     // Remove extra capabilities
     for (const capability of deviceCapabilities) {
       if (!driverCapabilities.includes(capability)) {
         this.log(`Removing capability ${capability}`);
         await this.removeCapability(capability);
+      }
+    }
+
+    // Add missing capabilities
+    for (const capability of driverCapabilities) {
+      if (!deviceCapabilities.includes(capability)) {
+        this.log(`Adding capability ${capability}`);
+        await this.addCapability(capability);
       }
     }
   }
