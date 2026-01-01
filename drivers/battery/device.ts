@@ -19,6 +19,7 @@ export default class PowerwallDevice extends TeslemetryDevice {
     this.pollingCleanup = [
       this.site.api.requestPolling("siteInfo"),
       this.site.api.requestPolling("liveStatus"),
+      this.site.api.requestPolling("energyHistory"),
     ];
 
     this.site.api.on("liveStatus", (liveStatus) => {
@@ -57,6 +58,33 @@ export default class PowerwallDevice extends TeslemetryDevice {
         !data.components.disallow_charge_from_grid_with_solar_installed,
       );
       this.update("storm_watch", data.user_settings.storm_mode_enabled);
+    });
+
+    this.site.api.on("energyHistory", async (energyHistory) => {
+      if (!energyHistory.response?.time_series?.length) return;
+
+      let imported = 0;
+      let exported = 0;
+
+      for (const event of energyHistory.response.time_series) {
+        if (
+          event.total_battery_charge !== undefined &&
+          event.total_battery_charge !== null
+        ) {
+          imported += event.total_battery_charge;
+        }
+        if (
+          event.total_battery_discharge !== undefined &&
+          event.total_battery_discharge !== null
+        ) {
+          exported += event.total_battery_discharge;
+        }
+      }
+
+      if (imported) this.update("meter_power.imported", imported);
+      if (exported) this.update("meter_power.exported", exported);
+
+      this.log(`Imported: ${imported}, Exported: ${exported}`);
     });
 
     // Register capability listeners

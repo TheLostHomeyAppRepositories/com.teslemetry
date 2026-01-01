@@ -1701,10 +1701,14 @@
         "charge_from_grid",
         "allow_export",
         "storm_watch",
-        "alarm_storm_watch_active"
+        "alarm_storm_watch_active",
+        "meter_power.imported",
+        "meter_power.exported"
       ],
       "energy": {
-        "homeBattery": true
+        "homeBattery": true,
+        "meterPowerImportedCapability": "meter_power.imported",
+        "meterPowerExportedCapability": "meter_power.exported"
       },
       "id": "battery"
     },
@@ -1751,8 +1755,15 @@
         "measure_power",
         "measure_power_load",
         "alarm_off_grid",
-        "alarm_island_status"
+        "alarm_island_status",
+        "meter_power.imported",
+        "meter_power.exported"
       ],
+      "energy": {
+        "cumulative": true,
+        "meterPowerImportedCapability": "meter_power.imported",
+        "meterPowerExportedCapability": "meter_power.exported"
+      },
       "id": "gateway"
     },
     {
@@ -1795,8 +1806,13 @@
       },
       "class": "solarpanel",
       "capabilities": [
-        "measure_power"
+        "measure_power",
+        "meter_power"
       ],
+      "energy": {
+        "homeBattery": true,
+        "meterPowerExportedCapability": "meter_power"
+      },
       "id": "solar"
     },
     {

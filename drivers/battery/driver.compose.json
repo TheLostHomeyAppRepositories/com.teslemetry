@@ -12,9 +12,13 @@
     "charge_from_grid",
     "allow_export",
     "storm_watch",
-    "alarm_storm_watch_active"
+    "alarm_storm_watch_active",
+    "meter_power.imported",
+    "meter_power.exported"
   ],
   "energy": {
-    "homeBattery": true
+    "homeBattery": true,
+    "meterPowerImportedCapability": "meter_power.imported",
+    "meterPowerExportedCapability": "meter_power.exported"
   }
 }

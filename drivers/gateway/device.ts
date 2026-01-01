@@ -41,6 +41,33 @@ export default class GatewayDevice extends TeslemetryDevice {
         islandStatusMap.get(data.island_status),
       );
     });
+
+    this.site.api.on("energyHistory", async (energyHistory) => {
+      if (!energyHistory.response?.time_series?.length) return;
+
+      let imported = 0;
+      let exported = 0;
+
+      for (const event of energyHistory.response.time_series) {
+        if (
+          event.grid_energy_imported !== undefined &&
+          event.grid_energy_imported !== null
+        ) {
+          imported += event.grid_energy_imported;
+        }
+        if (
+          event.total_grid_energy_exported !== undefined &&
+          event.total_grid_energy_exported !== null
+        ) {
+          exported += event.total_grid_energy_exported;
+        }
+      }
+
+      if (imported) this.update("meter_power.imported", imported);
+      if (exported) this.update("meter_power.exported", exported);
+
+      this.log(`Imported: ${imported}, Exported: ${exported}`);
+    });
   }
 
   async onUninit(): Promise<void> {

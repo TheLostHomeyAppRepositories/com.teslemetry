@@ -23,6 +23,25 @@ export default class SolarDevice extends TeslemetryDevice {
       if (!data) return;
       this.update("measure_power", data.solar_power);
     });
+
+    this.site.api.on("energyHistory", async (energyHistory) => {
+      if (!energyHistory.response?.time_series?.length) return;
+
+      let generated = 0;
+
+      for (const event of energyHistory.response.time_series) {
+        if (
+          event.total_solar_generation !== undefined &&
+          event.total_solar_generation !== null
+        ) {
+          generated += event.total_solar_generation;
+        }
+      }
+
+      if (generated) this.update("meter_power", generated);
+
+      this.log(`Generated: ${generated}`);
+    });
   }
 
   async onUninit() {
