@@ -21,9 +21,21 @@ const TASKS = [
   },
   {
     name: "Powerwall Icon",
-    path: "drivers/powerwall/assets/icon.svg",
+    path: "drivers/battery/assets/icon.svg",
     prompt:
       "Generate the XML code for a Scalable Vector Graphic (SVG) icon of a Tesla Powerwall 2 battery unit. The style must be: simple, flat, minimalist, monochrome (black shape), transparent background. It is a vertical rectangle. The viewBox should be '0 0 960 960'. Use 40px lines for outlines, 20px lines for detail, 10px lines for minor detail, and no fill. Output ONLY the raw SVG XML code, no markdown.",
+  },
+  {
+    name: "Solar Icon",
+    path: "drivers/solar/assets/icon.svg",
+    prompt:
+      "Generate the XML code for a Scalable Vector Graphic (SVG) icon of a Solar Panel. The style must be: simple, flat, minimalist, monochrome (black shape), transparent background. Show a rectangular panel with grid lines. The viewBox should be '0 0 960 960'. Use 40px lines for outlines, 20px lines for detail, 10px lines for minor detail, and no fill. Output ONLY the raw SVG XML code, no markdown.",
+  },
+  {
+    name: "Gateway Icon",
+    path: "drivers/gateway/assets/icon.svg",
+    prompt:
+      "Generate the XML code for a Scalable Vector Graphic (SVG) icon of an electrical grid meter. The style must be: simple, flat, minimalist, monochrome (black shape), transparent background. Show a box with a digital display or dial. The viewBox should be '0 0 960 960'. Use 40px lines for outlines, 20px lines for detail, 10px lines for minor detail, and no fill. Output ONLY the raw SVG XML code, no markdown.",
   },
   {
     name: "Wall Connector Icon",

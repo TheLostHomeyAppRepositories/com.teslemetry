@@ -19,8 +19,14 @@ const IMAGEN_MODEL = "imagen-3.0-generate-001";
 // Paths
 const ASSETS_DIR = path.resolve("assets/images");
 const DRIVER_VEHICLE_DIR = path.resolve("drivers/vehicle/assets/images");
-const DRIVER_ENERGY_SITE_DIR = path.resolve(
-  "drivers/energy-site/assets/images",
+const DRIVER_BATTERY_DIR = path.resolve(
+  "drivers/battery/assets/images",
+);
+const DRIVER_SOLAR_DIR = path.resolve(
+  "drivers/solar/assets/images",
+);
+const DRIVER_GATEWAY_DIR = path.resolve(
+  "drivers/gateway/assets/images",
 );
 const DRIVER_WALL_CONNECTOR_DIR = path.resolve(
   "drivers/wall-connector/assets/images",
@@ -32,7 +38,9 @@ const BRANDMARK_PATH = path.resolve("assets/Brandmark - ELECTRIC TIGHT.png");
 const dirs = [
   ASSETS_DIR,
   DRIVER_VEHICLE_DIR,
-  DRIVER_ENERGY_SITE_DIR,
+  DRIVER_BATTERY_DIR,
+  DRIVER_SOLAR_DIR,
+  DRIVER_GATEWAY_DIR,
   DRIVER_WALL_CONNECTOR_DIR,
 ];
 
@@ -68,7 +76,7 @@ const tasks: ImageTask[] = [
     name: "Driver: Vehicle",
     prompt:
       "A square studio shot of a white 2025 Tesla Model Y (Juniper) from a front 3/4 angle, centered in the frame. Pure white background, soft studio lighting, sharp details, photorealistic. The SUV is isolated on white, composed for square format. No text.",
-    outputDir: path.join(DRIVER_VEHICLE_DIR),
+    outputDir: DRIVER_VEHICLE_DIR,
     sizes: [
       { name: "small.png", width: 75, height: 75 },
       { name: "large.png", width: 500, height: 500 },
@@ -76,10 +84,32 @@ const tasks: ImageTask[] = [
     ],
   },
   {
-    name: "Driver: Energy Site",
+    name: "Driver: Home Battery",
     prompt:
       "A square studio shot of a Tesla Powerwall 3 battery unit, centered in the frame. Pure white background. Front view, clean, minimalist, photorealistic. The unit is isolated on white, composed for square format. No text.",
-    outputDir: path.join(DRIVER_ENERGY_SITE_DIR, "powerwall"),
+    outputDir: DRIVER_BATTERY_DIR,
+    sizes: [
+      { name: "small.png", width: 75, height: 75 },
+      { name: "large.png", width: 500, height: 500 },
+      { name: "xlarge.png", width: 1000, height: 1000 },
+    ],
+  },
+  {
+    name: "Driver: Solar Panel",
+    prompt:
+      "A square studio shot of a sleek black Tesla Solar Panel on a roof section (clean crop), centered in the frame. Pure white background. Minimalist, photorealistic. Isolated on white, composed for square format. No text.",
+    outputDir: DRIVER_SOLAR_DIR,
+    sizes: [
+      { name: "small.png", width: 75, height: 75 },
+      { name: "large.png", width: 500, height: 500 },
+      { name: "xlarge.png", width: 1000, height: 1000 },
+    ],
+  },
+  {
+    name: "Driver: Energy Gateway",
+    prompt:
+      "A square studio shot of a Tesla Gateway (white box with Tesla logo), centered in the frame. Pure white background. Minimalist, photorealistic. Isolated on white, composed for square format. No text.",
+    outputDir: DRIVER_GATEWAY_DIR,
     sizes: [
       { name: "small.png", width: 75, height: 75 },
       { name: "large.png", width: 500, height: 500 },
@@ -115,7 +145,9 @@ async function generateAndSave() {
   // Helper to copy icon.svg if missing
   const driverAssetsDirs = [
     path.resolve("drivers/vehicle/assets"),
-    path.resolve("drivers/energy-site/assets"),
+    path.resolve("drivers/battery/assets"),
+    path.resolve("drivers/solar/assets"),
+    path.resolve("drivers/gateway/assets"),
     path.resolve("drivers/wall-connector/assets"),
   ];
   for (const driverDir of driverAssetsDirs) {

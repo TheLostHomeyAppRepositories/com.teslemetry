@@ -1,17 +1,5 @@
 import { EnergyDetails } from "@teslemetry/api";
 import TeslemetryDevice from "../../lib/TeslemetryDevice.js";
-import { getCapabilities } from "./capabilities.js";
-
-const gridStatusMap = new Map<any, boolean>([
-  ["Active", false],
-  ["Inactive", true],
-]);
-
-const islandStatusMap = new Map<any, boolean>([
-  ["off_grid_intentional", true],
-  ["off_grid_unintentional", true],
-  ["on_grid", false],
-]);
 
 export default class PowerwallDevice extends TeslemetryDevice {
   site!: EnergyDetails;
@@ -31,26 +19,16 @@ export default class PowerwallDevice extends TeslemetryDevice {
     this.pollingCleanup = [
       this.site.api.requestPolling("siteInfo"),
       this.site.api.requestPolling("liveStatus"),
-      this.site.api.requestPolling("energyHistory"),
     ];
 
     this.site.api.on("liveStatus", (liveStatus) => {
       const data = liveStatus?.response;
       if (!data) return;
 
-      // Map Live Status fields
       this.update("measure_battery", data.percentage_charged);
       this.update(
-        "measure_power_battery",
+        "measure_power",
         data.battery_power !== undefined ? data.battery_power * -1 : undefined,
-      );
-      this.update("measure_power_solar", data.solar_power);
-      this.update("measure_power_grid", data.grid_power);
-      this.update("measure_power_load", data.load_power);
-      this.update("alarm_off_grid", gridStatusMap.get(data.grid_status));
-      this.update(
-        "alarm_island_status",
-        islandStatusMap.get(data.island_status),
       );
       this.update("alarm_storm_watch_active", data.storm_mode_active);
     });
@@ -58,28 +36,6 @@ export default class PowerwallDevice extends TeslemetryDevice {
     this.site.api.on("siteInfo", async (siteInfo) => {
       const data = siteInfo?.response;
       if (!data) return;
-
-      // Ensure class and capabilities are correct
-      const { capabilities } = getCapabilities(data);
-      const currentCapabilities = this.getCapabilities();
-
-      // Add new capabilities
-      for (const capability of capabilities) {
-        if (!currentCapabilities.includes(capability)) {
-          this.log(`Adding capability ${capability}`);
-          await this.addCapability(capability);
-        }
-      }
-
-      // Remove old capabilities
-      for (const capability of currentCapabilities) {
-        if (!capabilities.includes(capability)) {
-          this.log(`Removing capability ${capability}`);
-          await this.removeCapability(capability);
-        }
-      }
-
-      // Update capabilities
 
       this.update(
         "backup_reserve",
@@ -101,39 +57,6 @@ export default class PowerwallDevice extends TeslemetryDevice {
         !data.components.disallow_charge_from_grid_with_solar_installed,
       );
       this.update("storm_watch", data.user_settings.storm_mode_enabled);
-    });
-
-    this.site.api.on("energyHistory", (energyHistory) => {
-      if (!energyHistory.response?.events) return;
-
-      const sums = this.site.api.sumEnergyHistory(
-        energyHistory.response.events,
-      );
-
-      const totals = {
-        solar_energy_exported: null,
-        grid_energy_imported: null,
-        grid_services_energy_imported: null,
-        grid_services_energy_exported: null,
-        grid_energy_exported_from_solar: null,
-        grid_energy_exported_from_generator: null,
-        grid_energy_exported_from_battery: null,
-        battery_energy_exported: null,
-        battery_energy_imported_from_grid: null,
-        battery_energy_imported_from_solar: null,
-        battery_energy_imported_from_generator: null,
-        consumer_energy_imported_from_grid: null,
-        consumer_energy_imported_from_solar: null,
-        consumer_energy_imported_from_battery: null,
-        consumer_energy_imported_from_generator: null,
-        total_home_usage: null,
-        total_battery_charge: null,
-        total_battery_discharge: null,
-        total_solar_generation: null,
-        total_grid_energy_exported: null,
-      };
-
-      this.update("energy_history", data);
     });
 
     // Register capability listeners
@@ -172,6 +95,6 @@ export default class PowerwallDevice extends TeslemetryDevice {
   }
 
   async onUninit(): Promise<void> {
-    this.pollingCleanup.forEach((stop) => stop());
+    this.pollingCleanup?.forEach((stop) => stop());
   }
 }

@@ -27,9 +27,7 @@
   "category": [
     "energy"
   ],
-  "permissions": [
-    "homey:manager:api"
-  ],
+  "permissions": [],
   "images": {
     "small": "/assets/images/small.png",
     "large": "/assets/images/large.png",
@@ -1658,21 +1656,27 @@
   "drivers": [
     {
       "name": {
-        "en": "Tesla Energy Site"
+        "en": "Powerwall"
       },
-      "capabilities": [],
+      "class": "battery",
+      "capabilities": [
+        "measure_battery",
+        "measure_power",
+        "operation_mode",
+        "backup_reserve",
+        "charge_from_grid",
+        "allow_export",
+        "storm_watch",
+        "alarm_storm_watch_active"
+      ],
       "connectivity": [
         "cloud"
       ],
-      "class": "battery",
       "images": {
-        "small": "/drivers/energy-site/assets/images/small.png",
-        "large": "/drivers/energy-site/assets/images/large.png",
-        "xlarge": "/drivers/energy-site/assets/images/xlarge.png"
+        "small": "/drivers/battery/assets/images/small.png",
+        "large": "/drivers/battery/assets/images/large.png",
+        "xlarge": "/drivers/battery/assets/images/xlarge.png"
       },
-      "platforms": [
-        "local"
-      ],
       "pair": [
         {
           "id": "login_oauth2",
@@ -1696,7 +1700,92 @@
           "template": "login_oauth2"
         }
       ],
-      "id": "energy-site"
+      "id": "battery"
+    },
+    {
+      "name": {
+        "en": "Energy Gateway"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "measure_power",
+        "measure_power_load",
+        "alarm_off_grid",
+        "alarm_island_status"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/gateway/assets/images/small.png",
+        "large": "/drivers/gateway/assets/images/large.png",
+        "xlarge": "/drivers/gateway/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "login_oauth2",
+          "template": "login_oauth2"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "login_oauth2",
+          "template": "login_oauth2"
+        }
+      ],
+      "id": "gateway"
+    },
+    {
+      "name": {
+        "en": "Solar Panel"
+      },
+      "class": "solarpanel",
+      "capabilities": [
+        "measure_power"
+      ],
+      "connectivity": [
+        "cloud"
+      ],
+      "images": {
+        "small": "/drivers/solar/assets/images/small.png",
+        "large": "/drivers/solar/assets/images/large.png",
+        "xlarge": "/drivers/solar/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "login_oauth2",
+          "template": "login_oauth2"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "login_oauth2",
+          "template": "login_oauth2"
+        }
+      ],
+      "id": "solar"
     },
     {
       "name": {

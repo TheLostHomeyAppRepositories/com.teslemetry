@@ -1,16 +1,24 @@
 {
   "name": {
-    "en": "Tesla Energy Site"
+    "en": "Powerwall"
   },
-  "capabilities": [],
-  "connectivity": ["cloud"],
   "class": "battery",
+  "capabilities": [
+    "measure_battery",
+    "measure_power",
+    "operation_mode",
+    "backup_reserve",
+    "charge_from_grid",
+    "allow_export",
+    "storm_watch",
+    "alarm_storm_watch_active"
+  ],
+  "connectivity": ["cloud"],
   "images": {
     "small": "{{driverAssetsPath}}/images/small.png",
     "large": "{{driverAssetsPath}}/images/large.png",
     "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
   },
-  "platforms": ["local"],
   "pair": [
     {
       "id": "login_oauth2",

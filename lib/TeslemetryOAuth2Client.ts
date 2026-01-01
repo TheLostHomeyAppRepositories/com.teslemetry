@@ -173,11 +173,7 @@ export default class TeslemetryOAuth2Client {
   };
 
   hasValidToken(): boolean {
-    return (
-      !!this.token &&
-      !!this.token.expires_at &&
-      Date.now() < this.token.expires_at
-    );
+    return !!this.token;
   }
 
   clearToken() {
