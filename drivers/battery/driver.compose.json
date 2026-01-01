@@ -3,6 +3,7 @@
     "en": "Powerwall"
   },
   "class": "battery",
+  "$extends": ["teslemetry"],
   "capabilities": [
     "measure_battery",
     "measure_power",
@@ -13,33 +14,7 @@
     "storm_watch",
     "alarm_storm_watch_active"
   ],
-  "connectivity": ["cloud"],
-  "images": {
-    "small": "{{driverAssetsPath}}/images/small.png",
-    "large": "{{driverAssetsPath}}/images/large.png",
-    "xlarge": "{{driverAssetsPath}}/images/xlarge.png"
-  },
-  "pair": [
-    {
-      "id": "login_oauth2",
-      "template": "login_oauth2"
-    },
-    {
-      "id": "list_devices",
-      "template": "list_devices",
-      "navigation": {
-        "next": "add_devices"
-      }
-    },
-    {
-      "id": "add_devices",
-      "template": "add_devices"
-    }
-  ],
-  "repair": [
-    {
-      "id": "login_oauth2",
-      "template": "login_oauth2"
-    }
-  ]
+  "energy": {
+    "homeBattery": true
+  }
 }

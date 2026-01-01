@@ -1655,22 +1655,11 @@
   },
   "drivers": [
     {
-      "name": {
-        "en": "Powerwall"
-      },
-      "class": "battery",
-      "capabilities": [
-        "measure_battery",
-        "measure_power",
-        "operation_mode",
-        "backup_reserve",
-        "charge_from_grid",
-        "allow_export",
-        "storm_watch",
-        "alarm_storm_watch_active"
-      ],
       "connectivity": [
         "cloud"
+      ],
+      "platforms": [
+        "local"
       ],
       "images": {
         "small": "/drivers/battery/assets/images/small.png",
@@ -1700,21 +1689,31 @@
           "template": "login_oauth2"
         }
       ],
+      "name": {
+        "en": "Powerwall"
+      },
+      "class": "battery",
+      "capabilities": [
+        "measure_battery",
+        "measure_power",
+        "operation_mode",
+        "backup_reserve",
+        "charge_from_grid",
+        "allow_export",
+        "storm_watch",
+        "alarm_storm_watch_active"
+      ],
+      "energy": {
+        "homeBattery": true
+      },
       "id": "battery"
     },
     {
-      "name": {
-        "en": "Energy Gateway"
-      },
-      "class": "sensor",
-      "capabilities": [
-        "measure_power",
-        "measure_power_load",
-        "alarm_off_grid",
-        "alarm_island_status"
-      ],
       "connectivity": [
         "cloud"
+      ],
+      "platforms": [
+        "local"
       ],
       "images": {
         "small": "/drivers/gateway/assets/images/small.png",
@@ -1744,18 +1743,24 @@
           "template": "login_oauth2"
         }
       ],
+      "name": {
+        "en": "Energy Gateway"
+      },
+      "class": "sensor",
+      "capabilities": [
+        "measure_power",
+        "measure_power_load",
+        "alarm_off_grid",
+        "alarm_island_status"
+      ],
       "id": "gateway"
     },
     {
-      "name": {
-        "en": "Solar Panel"
-      },
-      "class": "solarpanel",
-      "capabilities": [
-        "measure_power"
-      ],
       "connectivity": [
         "cloud"
+      ],
+      "platforms": [
+        "local"
       ],
       "images": {
         "small": "/drivers/solar/assets/images/small.png",
@@ -1785,13 +1790,57 @@
           "template": "login_oauth2"
         }
       ],
+      "name": {
+        "en": "Solar Panel"
+      },
+      "class": "solarpanel",
+      "capabilities": [
+        "measure_power"
+      ],
       "id": "solar"
     },
     {
+      "connectivity": [
+        "cloud"
+      ],
+      "platforms": [
+        "local"
+      ],
+      "images": {
+        "small": "/drivers/vehicle/assets/images/small.png",
+        "large": "/drivers/vehicle/assets/images/large.png",
+        "xlarge": "/drivers/vehicle/assets/images/xlarge.png"
+      },
+      "pair": [
+        {
+          "id": "login_oauth2",
+          "template": "login_oauth2"
+        },
+        {
+          "id": "list_devices",
+          "template": "list_devices",
+          "navigation": {
+            "next": "add_devices"
+          }
+        },
+        {
+          "id": "add_devices",
+          "template": "add_devices"
+        }
+      ],
+      "repair": [
+        {
+          "id": "login_oauth2",
+          "template": "login_oauth2"
+        }
+      ],
       "name": {
         "en": "Tesla Vehicle"
       },
       "class": "car",
+      "energy": {
+        "electricCar": true
+      },
       "capabilities": [
         "measure_battery",
         "measure_range",
@@ -1826,61 +1875,12 @@
         "button_homelink",
         "button_wake_up"
       ],
-      "connectivity": [
-        "cloud"
-      ],
-      "energy": {
-        "electricCar": true
-      },
-      "images": {
-        "small": "/drivers/vehicle/assets/images/small.png",
-        "large": "/drivers/vehicle/assets/images/large.png",
-        "xlarge": "/drivers/vehicle/assets/images/xlarge.png"
-      },
-      "platforms": [
-        "local"
-      ],
-      "pair": [
-        {
-          "id": "login_oauth2",
-          "template": "login_oauth2"
-        },
-        {
-          "id": "list_devices",
-          "template": "list_devices",
-          "navigation": {
-            "next": "add_devices"
-          }
-        },
-        {
-          "id": "add_devices",
-          "template": "add_devices"
-        }
-      ],
-      "repair": [
-        {
-          "id": "login_oauth2",
-          "template": "login_oauth2"
-        }
-      ],
       "id": "vehicle"
     },
     {
-      "name": {
-        "en": "Tesla Wall Connector"
-      },
-      "class": "evcharger",
-      "capabilities": [
-        "evcharger_charging_state",
-        "measure_power",
-        "connected_vehicle"
-      ],
       "connectivity": [
         "cloud"
       ],
-      "energy": {
-        "evCharger": true
-      },
       "platforms": [
         "local"
       ],
@@ -1911,6 +1911,18 @@
           "id": "login_oauth2",
           "template": "login_oauth2"
         }
+      ],
+      "name": {
+        "en": "Tesla Wall Connector"
+      },
+      "class": "evcharger",
+      "energy": {
+        "evCharger": true
+      },
+      "capabilities": [
+        "evcharger_charging_state",
+        "measure_power",
+        "connected_vehicle"
       ],
       "id": "wall-connector"
     }
