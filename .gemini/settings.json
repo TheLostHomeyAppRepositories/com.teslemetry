@@ -1,7 +1,9 @@
 {
-  "fileFiltering": {
-    "respectGitIgnore": false,
-    "enableRecursiveFileSearch": true
+  "context": {
+    "fileFiltering": {
+      "respectGitIgnore": false,
+      "enableRecursiveFileSearch": true
+    }
   },
   "mcpServers": {
     "homey-docs": {

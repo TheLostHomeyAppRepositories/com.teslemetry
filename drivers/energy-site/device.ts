@@ -31,6 +31,7 @@ export default class PowerwallDevice extends TeslemetryDevice {
     this.pollingCleanup = [
       this.site.api.requestPolling("siteInfo"),
       this.site.api.requestPolling("liveStatus"),
+      this.site.api.requestPolling("energyHistory"),
     ];
 
     this.site.api.on("liveStatus", (liveStatus) => {
@@ -100,6 +101,39 @@ export default class PowerwallDevice extends TeslemetryDevice {
         !data.components.disallow_charge_from_grid_with_solar_installed,
       );
       this.update("storm_watch", data.user_settings.storm_mode_enabled);
+    });
+
+    this.site.api.on("energyHistory", (energyHistory) => {
+      if (!energyHistory.response?.events) return;
+
+      const sums = this.site.api.sumEnergyHistory(
+        energyHistory.response.events,
+      );
+
+      const totals = {
+        solar_energy_exported: null,
+        grid_energy_imported: null,
+        grid_services_energy_imported: null,
+        grid_services_energy_exported: null,
+        grid_energy_exported_from_solar: null,
+        grid_energy_exported_from_generator: null,
+        grid_energy_exported_from_battery: null,
+        battery_energy_exported: null,
+        battery_energy_imported_from_grid: null,
+        battery_energy_imported_from_solar: null,
+        battery_energy_imported_from_generator: null,
+        consumer_energy_imported_from_grid: null,
+        consumer_energy_imported_from_solar: null,
+        consumer_energy_imported_from_battery: null,
+        consumer_energy_imported_from_generator: null,
+        total_home_usage: null,
+        total_battery_charge: null,
+        total_battery_discharge: null,
+        total_solar_generation: null,
+        total_grid_energy_exported: null,
+      };
+
+      this.update("energy_history", data);
     });
 
     // Register capability listeners

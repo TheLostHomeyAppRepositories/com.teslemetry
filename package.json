@@ -15,7 +15,7 @@
     "app:publish": "homey app publish"
   },
   "dependencies": {
-    "@teslemetry/api": "^0.6.2"
+    "@teslemetry/api": "^0.6.4"
   },
   "devDependencies": {
     "@google/genai": "^1.33.0",
