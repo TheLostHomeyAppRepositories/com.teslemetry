@@ -540,7 +540,7 @@
       },
       "class": "sensor",
       "capabilities": [
-        "measure_power",
+        "measure_power.grid",
         "measure_power.load",
         "alarm_generic.off_grid",
         "alarm_generic.island",
@@ -556,6 +556,14 @@
         "meter_power.exported": {
           "title": {
             "en": "Exported Energy"
+          }
+        },
+        "measure_power.grid": {
+          "title": {
+            "en": "Grid Power"
+          },
+          "units": {
+            "en": "W"
           }
         },
         "measure_power.load": {
@@ -578,8 +586,9 @@
         }
       },
       "energy": {
-        "meterPowerImportedCapability": "meter_power.imported",
-        "meterPowerExportedCapability": "meter_power.exported"
+        "cumulative": true,
+        "cumulativeImportedCapability": "meter_power.imported",
+        "cumulativeExportedCapability": "meter_power.exported"
       },
       "id": "gateway"
     },

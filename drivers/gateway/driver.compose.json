@@ -5,7 +5,7 @@
   "class": "sensor",
   "$extends": ["teslemetry"],
   "capabilities": [
-    "measure_power",
+    "measure_power.grid",
     "measure_power.load",
     "alarm_generic.off_grid",
     "alarm_generic.island",
@@ -19,19 +19,24 @@
     "meter_power.exported": {
       "title": { "en": "Exported Energy" }
     },
+    "measure_power.grid": {
+      "title": { "en": "Grid Power" },
+      "units": { "en": "W" }
+    },
     "measure_power.load": {
-        "title": { "en": "Load Power" },
-        "units": { "en": "W" }
+      "title": { "en": "Load Power" },
+      "units": { "en": "W" }
     },
     "alarm_generic.off_grid": {
-        "title": { "en": "Grid Status" }
+      "title": { "en": "Grid Status" }
     },
     "alarm_generic.island": {
-        "title": { "en": "Island Status" }
+      "title": { "en": "Island Status" }
     }
   },
   "energy": {
-    "meterPowerImportedCapability": "meter_power.imported",
-    "meterPowerExportedCapability": "meter_power.exported"
+    "cumulative": true,
+    "cumulativeImportedCapability": "meter_power.imported",
+    "cumulativeExportedCapability": "meter_power.exported"
   }
 }
