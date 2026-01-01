@@ -61,7 +61,7 @@ export default class WallConnecter extends TeslemetryDevice {
         }
       }
 
-      if (charged !== null) this.update("meter_power", charged);
+      if (charged !== null) this.update("meter_power", charged / 1000);
     });
   }
 
