@@ -1,11 +1,38 @@
 import Homey from "homey";
 import type TeslemetryApp from "../app.js";
+import type TeslemetryDriver from "./TeslemetryDriver.js";
 import { TeslemetryApiError } from "../@types/error.js";
 
 export default class TeslemetryDevice extends Homey.Device {
   declare homey: Homey.Device["homey"] & {
     app: TeslemetryApp;
   };
+  declare driver: TeslemetryDriver;
+
+  async onInit() {
+    await this.ensureCapabilities();
+  }
+
+  public async ensureCapabilities() {
+    const driverCapabilities = this.driver.manifest.capabilities || [];
+    const deviceCapabilities = this.getCapabilities();
+
+    // Add missing capabilities
+    for (const capability of driverCapabilities) {
+      if (!deviceCapabilities.includes(capability)) {
+        this.log(`Adding capability ${capability}`);
+        await this.addCapability(capability);
+      }
+    }
+
+    // Remove extra capabilities
+    for (const capability of deviceCapabilities) {
+      if (!driverCapabilities.includes(capability)) {
+        this.log(`Removing capability ${capability}`);
+        await this.removeCapability(capability);
+      }
+    }
+  }
 
   /**
    * Safely updates a capability value if its supported.

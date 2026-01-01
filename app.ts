@@ -1,16 +1,10 @@
-"use strict";
+import sourceMapSupport from "source-map-support";
+sourceMapSupport.install();
 
 import Homey from "homey";
 import { Products, Teslemetry } from "@teslemetry/api";
 import TeslemetryOAuth2Client from "./lib/TeslemetryOAuth2Client.js";
 import type { TeslemetryApiError } from "./@types/error.d.ts";
-
-const errors = [
-  "invalid_token",
-  "subscription_required",
-  "could_not_wake_vehicle",
-  "insufficient_credits",
-];
 
 export default class TeslemetryApp extends Homey.App {
   public oauth!: TeslemetryOAuth2Client;

@@ -25,13 +25,7 @@ export default class VehicleDevice extends TeslemetryDevice {
   private vehicle!: VehicleDetails;
 
   async onInit() {
-    // Migrations
-    if (this.hasCapability("windowcoverings_state")) {
-      this.removeCapability("windowcoverings_state");
-    }
-    if (!this.hasCapability("windowcoverings_closed")) {
-      this.addCapability("windowcoverings_closed");
-    }
+    await super.onInit();
 
     try {
       const vehicle = this.homey.app.products?.vehicles?.[this.getData().vin];
@@ -186,14 +180,20 @@ export default class VehicleDevice extends TeslemetryDevice {
     this.registerCapabilityListener("steering_wheel_heater", async (value) => {
       switch (value) {
         case "0":
-          this.vehicle.api.setSteeringWheelHeater(false).catch(this.handleApiError);
+          this.vehicle.api
+            .setSteeringWheelHeater(false)
+            .catch(this.handleApiError);
           break;
         case "1":
-          this.vehicle.api.setSteeringWheelHeatLevel(1).catch(this.handleApiError);
+          this.vehicle.api
+            .setSteeringWheelHeatLevel(1)
+            .catch(this.handleApiError);
           //await this.vehicle.api.setSteeringWheelHeater(true);?
           break;
         case "3":
-          this.vehicle.api.setSteeringWheelHeatLevel(3).catch(this.handleApiError);
+          this.vehicle.api
+            .setSteeringWheelHeatLevel(3)
+            .catch(this.handleApiError);
           //await this.vehicle.api.setSteeringWheelHeater(true);?
           break;
       }

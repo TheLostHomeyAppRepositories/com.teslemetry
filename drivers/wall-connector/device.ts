@@ -10,6 +10,8 @@ export default class WallConnecter extends TeslemetryDevice {
    * onInit is called when the device is initialized.
    */
   async onInit() {
+    await super.onInit();
+
     try {
       const site = this.homey.app.products?.energySites?.[this.getData().site];
       if (!site) throw new Error("No site found");
@@ -47,20 +49,19 @@ export default class WallConnecter extends TeslemetryDevice {
     this.site.api.on("chargeHistory", async (energyHistory) => {
       if (!energyHistory.response?.time_series?.length) return;
 
-      let charged = 0;
+      let charged: number | null = null;
 
       for (const event of energyHistory.response.time_series) {
         if (
           event.energy_added_wh !== undefined &&
           event.energy_added_wh !== null
         ) {
+          // @ts-expect-error
           charged += event.energy_added_wh;
         }
       }
 
-      if (charged) this.update("meter_power", charged);
-
-      this.log(`Charged: ${charged}`);
+      if (charged !== null) this.update("meter_power", charged);
     });
   }
 

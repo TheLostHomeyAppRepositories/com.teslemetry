@@ -6,6 +6,8 @@ export default class PowerwallDevice extends TeslemetryDevice {
   pollingCleanup!: Array<() => void>;
 
   async onInit() {
+    await super.onInit();
+
     try {
       const site = this.homey.app.products?.energySites?.[this.getData().id];
       if (!site) throw new Error("No site found");
@@ -63,28 +65,29 @@ export default class PowerwallDevice extends TeslemetryDevice {
     this.site.api.on("energyHistory", async (energyHistory) => {
       if (!energyHistory.response?.time_series?.length) return;
 
-      let imported = 0;
-      let exported = 0;
+      let charged: number | null = null;
+      let discharged: number | null = null;
 
       for (const event of energyHistory.response.time_series) {
         if (
           event.total_battery_charge !== undefined &&
           event.total_battery_charge !== null
         ) {
-          imported += event.total_battery_charge;
+          //@ts-expect-error
+          charged += event.total_battery_charge;
         }
         if (
           event.total_battery_discharge !== undefined &&
           event.total_battery_discharge !== null
         ) {
-          exported += event.total_battery_discharge;
+          //@ts-expect-error
+          discharged += event.total_battery_discharge;
         }
       }
 
-      if (imported) this.update("meter_power.imported", imported);
-      if (exported) this.update("meter_power.exported", exported);
-
-      this.log(`Imported: ${imported}, Exported: ${exported}`);
+      if (charged !== null) this.update("meter_power.charged", charged / 1000);
+      if (discharged !== null)
+        this.update("meter_power.discharged", discharged / 1000);
     });
 
     // Register capability listeners

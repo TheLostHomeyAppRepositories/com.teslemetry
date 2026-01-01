@@ -5,30 +5,27 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "tsc": "tsc",
-    "build": "homey app build",
+    "build": "tsc",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
-    "dev": "tsc && homey app run --skip-build",
-    "app:run": "tsc && homey app run",
+    "dev": "homey app run",
+    "app:run": "homey app run",
     "app:install": "homey app install",
     "app:validate": "homey app validate --level verified",
     "app:publish": "homey app publish",
     "homey": "homey"
   },
   "dependencies": {
-    "@teslemetry/api": "^0.6.6"
+    "@teslemetry/api": "^0.6.7",
+    "homey": "^3.12.0",
+    "source-map-support": "^0.5.21"
   },
   "devDependencies": {
-    "@google/genai": "^1.33.0",
-    "@google/generative-ai": "^0.24.1",
     "@tsconfig/node16": "^16.1.8",
     "@types/homey": "npm:homey-apps-sdk-v3-types@^0.3.12",
     "@types/node": "^24.10.2",
-    "@types/sharp": "^0.31.1",
+    "@types/source-map-support": "^0.5.10",
     "eslint": "^7.32.0",
     "eslint-config-athom": "^3.1.5",
-    "homey": "^3.12.0",
-    "sharp": "^0.34.5",
     "typescript": "^5.9.3"
   }
 }

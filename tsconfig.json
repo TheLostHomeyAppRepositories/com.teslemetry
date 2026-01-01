@@ -3,9 +3,11 @@
   "compilerOptions": {
     "allowJs": true,
     "outDir": ".homeybuild/",
+    "sourceMap": true,
     "typeRoots": ["./node_modules/@types", "./@types"],
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
   },
   "include": ["app.ts", "api.ts", "drivers/**/*"],
+  "exclude": [".homeybuild"],
 }

@@ -1702,13 +1702,25 @@
         "allow_export",
         "storm_watch",
         "alarm_storm_watch_active",
-        "meter_power.imported",
-        "meter_power.exported"
+        "meter_power.charged",
+        "meter_power.discharged"
       ],
+      "capabilitiesOptions": {
+        "meter_power.charged": {
+          "title": {
+            "en": "Charged Energy"
+          }
+        },
+        "meter_power.discharged": {
+          "title": {
+            "en": "Discharged Energy"
+          }
+        }
+      },
       "energy": {
         "homeBattery": true,
-        "meterPowerImportedCapability": "meter_power.imported",
-        "meterPowerExportedCapability": "meter_power.exported"
+        "meterPowerImportedCapability": "meter_power.charged",
+        "meterPowerExportedCapability": "meter_power.discharged"
       },
       "id": "battery"
     },
@@ -1759,8 +1771,19 @@
         "meter_power.imported",
         "meter_power.exported"
       ],
+      "capabilitiesOptions": {
+        "meter_power.imported": {
+          "title": {
+            "en": "Imported Energy"
+          }
+        },
+        "meter_power.exported": {
+          "title": {
+            "en": "Exported Energy"
+          }
+        }
+      },
       "energy": {
-        "cumulative": true,
         "meterPowerImportedCapability": "meter_power.imported",
         "meterPowerExportedCapability": "meter_power.exported"
       },
@@ -1810,7 +1833,6 @@
         "meter_power"
       ],
       "energy": {
-        "homeBattery": true,
         "meterPowerExportedCapability": "meter_power"
       },
       "id": "solar"
