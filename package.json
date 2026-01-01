@@ -8,11 +8,12 @@
     "tsc": "tsc",
     "build": "homey app build",
     "lint": "eslint --ext .js,.ts --ignore-path .gitignore .",
-    "dev": "homey app run",
-    "app:run": "homey app run",
+    "dev": "tsc && homey app run --skip-build",
+    "app:run": "tsc && homey app run",
     "app:install": "homey app install",
     "app:validate": "homey app validate --level verified",
-    "app:publish": "homey app publish"
+    "app:publish": "homey app publish",
+    "homey": "homey"
   },
   "dependencies": {
     "@teslemetry/api": "^0.6.6"

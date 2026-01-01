@@ -4,12 +4,13 @@
   },
   "class": "evcharger",
   "$extends": ["teslemetry"],
-  "energy": {
-    "evCharger": true
-  },
   "capabilities": [
     "evcharger_charging_state",
     "measure_power",
     "connected_vehicle"
-  ]
+  ],
+  "energy": {
+    "evCharger": true,
+    "meterPowerImportedCapability": "meter_power"
+  }
 }
