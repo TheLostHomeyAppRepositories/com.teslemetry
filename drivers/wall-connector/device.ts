@@ -70,7 +70,7 @@ export default class WallConnecter extends TeslemetryDevice {
    * @param state - Numerical state from wall_connector_state
    * @returns The corresponding evcharger_charging_state enum value
    */
-  private mapWallConnectorState(state: number): string {
+  private mapWallConnectorState(state: number): string | undefined {
     switch (state) {
       case 1:
         return "plugged_in_charging";
@@ -82,7 +82,7 @@ export default class WallConnecter extends TeslemetryDevice {
         return "plugged_in_paused";
       default:
         this.log(`Unknown wall_connector_state: ${state}`);
-        return "plugged_out";
+        return undefined;
     }
   }
 
