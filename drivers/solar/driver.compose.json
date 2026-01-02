@@ -4,6 +4,7 @@
   },
   "class": "solarpanel",
   "$extends": ["teslemetry"],
+  "uiQuickAction": false,
   "capabilities": ["measure_power", "meter_power"],
   "energy": {
     "meterPowerExportedCapability": "meter_power"
