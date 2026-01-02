@@ -31,6 +31,15 @@ export default class VehicleDevice extends TeslemetryDevice {
       const vehicle = this.homey.app.products?.vehicles?.[this.getData().vin];
       if (!vehicle) throw new Error("No vehicle found");
       this.vehicle = vehicle;
+
+      this.setCapabilityOptions("onoff.frunk", {
+        ...this.driver.manifest.capabilitiesOptions["onoff.frunk"],
+        setable: !!this.vehicle.metadata.config?.can_actuate_trunks,
+      }).catch(this.error);
+      this.setCapabilityOptions("onoff.trunk", {
+        ...this.driver.manifest.capabilitiesOptions["onoff.trunk"],
+        setable: !!this.vehicle.metadata.config?.can_actuate_trunks,
+      }).catch(this.error);
     } catch (e) {
       this.log("Failed to initialize Vehicle device");
       this.error(e);
@@ -134,7 +143,8 @@ export default class VehicleDevice extends TeslemetryDevice {
         this.update("alarm_contact.rl", value.DriverRear);
       if (isBool(value?.PassengerRear))
         this.update("alarm_contact.rr", value.PassengerRear);
-      if (isBool(value?.TrunkFront)) this.update("onoff.frunk", value.TrunkFront);
+      if (isBool(value?.TrunkFront))
+        this.update("onoff.frunk", value.TrunkFront);
       if (isBool(value?.TrunkRear)) this.update("onoff.trunk", value.TrunkRear);
     });
 

@@ -102,6 +102,9 @@
     },
     "button.wakeup": {
       "title": { "en": "Wake Up" }
+    },
+    "windowcoverings_closed": {
+      "title": { "en": "Windows" }
     }
   }
 }
